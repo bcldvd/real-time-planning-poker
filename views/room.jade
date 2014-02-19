@@ -9,6 +9,8 @@ block content
 			h3.panel-title Participants
 		div#participants.panel-body
 			| 
+	a.btn.btn-success.btn-lg.btn-block(type='button', href='/room/#{room}/game') Get planning !
+
 
 block append scripts
 	script(src='/js/room.js?v=#{cacheBuster}')

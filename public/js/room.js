@@ -24,8 +24,11 @@ $(document).ready(function() {
 
 	var username = prompt("Enter your name for others to see");
 
-	if (username!=null) {
+	
+	if (username!=null) { // On demande le nom du participant que l'on ajoute à la liste
 		document.getElementById("participants").innerHTML=username;
+	}else{ // Si il refuse de donner son nom on le redirige en page d'accueil
+		window.location.replace('/');
 	}
 
 });
