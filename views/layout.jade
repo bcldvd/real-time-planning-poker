@@ -15,5 +15,6 @@ html
         include partials/flash
         block content
     include partials/footer
-    != js('application')
+    block scripts
+      != js('application')
     script(src='/socket.io/socket.io.js?v=#{cacheBuster}')

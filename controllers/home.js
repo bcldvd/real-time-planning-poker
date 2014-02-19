@@ -8,3 +8,15 @@ exports.index = function(req, res) {
     title: 'Home'
   });
 };
+
+/**
+ * GET /+:room
+ * Room
+ */
+
+exports.room = function(req, res) {
+  res.render('room', {
+    title: 'Room',
+    room: req.params.room
+  });
+};

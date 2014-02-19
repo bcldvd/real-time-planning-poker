@@ -1,0 +1,14 @@
+extends layout
+
+block content
+	h1 Welcome to your private room 
+	p.lead
+		a(href='/room/#{room}') Share the link to your collaborators ➔
+	div.panel.panel-default
+		div.panel-heading
+			h3.panel-title Participants
+		div#participants.panel-body
+			| 
+
+block append scripts
+	script(src='/js/room.js?v=#{cacheBuster}')

@@ -98,6 +98,7 @@ app.use(express.errorHandler());
  */
 
 app.get('/', homeController.index);
+app.get('/room/:room', homeController.room);
 app.get('/login', userController.getLogin);
 app.post('/login', userController.postLogin);
 app.get('/logout', userController.logout);
