@@ -1,72 +1,26 @@
-
-Real Time Planning Poker (STILL IN DEV)
+Real Time Planning Poker
 =================
-A boilerplate for **Node.js** web applications.
-
-**Live Demo**: http://hackathonstarter.herokuapp.com :octocat:
-
-If you have attended any hackathons in the past then you know how much time it takes to
-get a project started. Decide on an idea, pick a programming language, pick a web framework,
-pick a CSS framework. A while later, you will have an initial project up on GitHub, and only then can other team members
-start contributing. Or what about doing something as simple as OAuth 2.0 Authentication? You can spend hours
-on it if you are not familiar with how OAuth 2.0 works. *(As a side-note, over a year ago
-I had no idea WTF REST or OAuth were, or how to do a simple "Sign in with Facebook".
-It was a frustrating experience to say the least.)*
-
-When I started this project, my primary focus was on **simplicity** and **ease of use**.
-I also tried to make it as **generic** and **reusable** as possible to cover most use cases of hackathon web apps,
-without being too specific. In the worst case you can use this as a guide for your projects, if for example you are only
-interested in **Sign in with Google** authentication and nothing else.
-
-Chances are, you might not need all 4 types of OAuth 1.0a/OAuth2 authentication methods, or all 12+ API examples. So, use what you need and delete what you don't need. As of recently, it is possible to selectively *enable/disable* authentication methods in `config/secrets.js`.
-
-<h4 align="center">Flatly Bootstrap Theme</h3>
-
-![Alt](https://lh6.googleusercontent.com/-NikjFtdyOq8/UsCv7URplAI/AAAAAAAADrE/a417u0cZU7Y/w1278-h958-no/Screenshot+2013-12-29+18.27.10.png)
-
-<h4 align="center">Default Theme</h3>
-
-![Alt](https://lh5.googleusercontent.com/-KmlaMLKGCqg/UuWt4MrXzeI/AAAAAAAAD6o/KUucObo33zU/w1170-h860-no/Screenshot+2014-01-26+19.52.03.png)
 
 Table of Contents
 -----------------
 - [Features](#features)
 - [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)
-- [Obtaining API Keys](#obtaining-api-keys)
 - [Project Structure](#project-structure)
-- [Useful Tools](#useful-tools)
-- [Recommended Design](#recommended-design)
-- [Recommended Node.js Libraries](#recommended-nodejs-libraries)
-- [Recommended Client-Side Libraries](#recommended-client-side-libraries)
 - [Pro Tips](#pro-tips)
 - [FAQ](#faq)
-- [How It Works](#how-it-works-mini-guides)
-- [Mongoose Cheatsheet](#mongoose-cheatsheet)
-- [Deployment](#deployment)
 - [TODO](#todo)
 - [Contributing](#contributing)
 - [License](#license)
 
 Features
 --------
-- **Local Authentication** using Email and Password
-- **OAuth 1.0a Authentication** via Twitter
-- **OAuth 2.0 Authentication** via Facebook, Google or GitHub
 - Awesome flash notifications with animations by [animate.css](http://daneden.github.io/animate.css/)
 - MVC Project Structure
 - Node.js clusters support
 - Rails 3.1-style asset pipeline (See FAQ)
 - LESS stylesheets (auto-compiled via Express middleware)
 - Bootstrap 3 + Flat UI + iOS7 Theme
-- Contact Form (powered by Mailgun or Sendgrid)
-- **Account Management**
- - Gravatar
- - Profile Details
- - Change Password
- - Link multiple OAuth strategies to one account
- - Delete Account
-- **API Examples**: Facebook, Foursquare, Last.fm, Tumblr, Twitter, PayPal, and more.
 
 Prerequisites
 -------------
@@ -90,7 +44,7 @@ The easiest way to get started is to clone the repository:
 
 ```bash
 # Fetch only the latest commits.
-git clone --depth=1 git@github.com:sahat/hackathon-starter.git my-project
+git clone git@github.com:bcldvd/real-time-planning-poker.git my-project
 
 cd my-project
 
@@ -105,125 +59,6 @@ node app.js
 >application and automatically restart the server. Once installed, instead of `node app.js` use `nodemon app.js`.
 >It is a big time saver in the long run.
 
-Next up, if you want to use any of the APIs or OAuth authentication methods, you will need to obtain
-appropriate credentials: Client ID, Client Secret, API Key, or Username & Password. You will
-need to go through each provider to generate new credentials.
-
-Obtaining API Keys
-------------------
-
-:pushpin: You could support all 5 authentication methods by setting up OAuth keys, but you don't have to. If you would only like to have **Facebook sign-in** and **Local sign-in** with email and password, in **secrets.js** set `googleAuth: false`, `twitterOauth: false`, `githubAuth: false`. By doing so, *Google, Twitter and Github* buttons will not show up on the *Login* page. If you set `localAuth: false`, users will not be able to login/create an account with email and password or change password in the *Account Management* page.
-
-<img src="http://images.google.com/intl/en_ALL/images/srpr/logo6w.png" width="200">
-- Visit [Google Cloud Console](https://cloud.google.com/console/project)
-- Click **CREATE PROJECT** button
-- Enter *Project Name*, then click **CREATE**
-- Then select *APIs & auth* from the sidebar and click on *Credentials* tab
-- Click **CREATE NEW CLIENT ID** button
- - **Application Type**: Web Application
- - **Authorized Javascript origins**: http://localhost:3000
- - **Authorized redirect URI**: http://localhost:3000/auth/google/callback
-- Copy and paste *Client ID* and *Client secret* keys into `config/secrets.js`
-
-:exclamation: **Note**: When you ready to deploy to production don't forget to add your new url to *Authorized Javascript origins* and *Authorized redirect URI*, e.g. `http://my-awesome-app.herokuapp.com` and `http://my-awesome-app.herokuapp.com/auth/google/callback` respectively. The same goes for other providers.
-
-<hr>
-
-<img src="http://www.doit.ba/img/facebook.jpg" width="200">
-- Visit [Facebook Developers](https://developers.facebook.com/)
-- Click **Apps > Create a New App** in the navigation bar
-- Enter *Display Name*, then choose a category, then click **Create app**
-- Copy and paste *App ID* and *App Secret* keys into `config/secrets.js`
- - *App ID* is **clientID**, *App Secret* is **clientSecret**
-- Click on *Settings* on the sidebar, then click **+ Add Platform**
-- Select **Website**
-- Enter `http://localhost:3000` for *Site URL*
-
-:exclamation: **Note**: After a successful sign in with Facebook, a user will be redirected back to home page with appended hash `#_=_` in the URL. It is *not* a bug. See this [Stack Overflow](https://stackoverflow.com/questions/7131909/facebook-callback-appends-to-return-url) discussion for ways to handle it.
-
-<hr>
-
-<img src="https://github.global.ssl.fastly.net/images/modules/logos_page/GitHub-Logo.png" width="200">
-- Go to [Account Settings](https://github.com/settings/profile)
-- Select **Applications** from the sidebar
-- Then inside **Developer applications** click on **Register new application**
-- Enter *Application Name* and *Homepage URL*.
-- For *Authorization Callback URL*: http://localhost:3000/auth/github/callback
-- Click **Register application**
-- Now copy and paste *Client ID* and *Client Secret* keys into `config/secrets.js`
-
-<hr>
-
-<img src="https://g.twimg.com/Twitter_logo_blue.png" width="100">
-- Sign in at [https://dev.twitter.com](https://dev.twitter.com/)
-- From the profile picture dropdown menu select **My Applications**
-- Click **Create a new application**
-- Enter your application name, website and description
-- For **Callback URL**: http://127.0.0.1:3000/auth/twitter/callback
-- Go to **Settings** tab
-- Under *Application Type* select **Read and Write** access
-- Check the box **Allow this application to be used to Sign in with Twitter**
-- Click **Update this Twitter's applications settings**
-- Copy and paste *Consumer Key* and *Consumer Secret* keys into `config/secrets.js`
-
-<hr>
-
-<img src="https://s3.amazonaws.com/venmo/venmo_logo_blue.png" width="200">
-- Visit the **Account** section of your Venmo profile after logging in
-- Click on the **Developers** tab
-- Then click on the [new](https://venmo.com/account/app/new) link next to **Your Applications (0)**
-- Fill in the required fields: *App Name* and *What Will The App Be Used For?*
-- For **Web Redirect URL** enter: http://localhost:3000/auth/venmo/callback
-- Hit **Create** button
-- Back on the **Developers** tab click on **view** link next to **Your Applications (1) new**
-- Copy and paste **ID** and **Secret** keys into `config/secrets.js`
-
-<hr>
-
-<img src="https://www.paypalobjects.com/webstatic/developer/logo_paypal-developer_beta.png" width="200">
-- Visit [PayPal Developer](https://developer.paypal.com/)
-- Log in to your PayPal account
-- Click **Applications > Create App** in the navigation bar
-- Enter *Application Name*, then click **Create app**
-- Copy and paste *Client ID* and *Secret* keys into `config/secrets.js`
-- *App ID* is **client_id**, *App Secret* is **client_secret**
-- Change **host** to api.paypal.com if you want to test against production and use the live credentials
-
-<hr>
-
-<img src="https://www.dropboxatwork.com/wp-content/uploads/2013/02/foursquare-logo.png" width="200">
-- Go to [foursquare for Developers](https://developer.foursquare.com/)
-- Click on **My Apps** in the top menu
-- Click the **Create A New App** button
-- Enter *App Name*, *Welcome page url*,
-- For **Redirect URI**: http://localhost:3000/auth/foursquare/callback
-- Click **Save Changes**
-- Copy and paste *Client ID* and *Client Secret* keys into `config/secrets.js`
-
-<hr>
-
-<img src="http://www.athgo.org/ablog/wp-content/uploads/2013/02/tumblr_logo.png" width="200">
-- Go to http://www.tumblr.com/oauth/apps
-- Once signed in, click **+Register application**
-- Fill in all the details
-- For **Default Callback URL**: http://localhost:3000/auth/tumblr/callback
-- Click **✔Register**
-- Copy and paste *OAuth consumer key* and *OAuth consumer secret* keys into `config/secrets.js`
-
-<hr>
-
-<img src="http://www.outofoursystem.com/wp-content/uploads/2012/06/steam-logo-white.jpg" width="200">
-- Go to http://steamcommunity.com/dev/apikey
-- Sign in with your existing Steam account
-- Enter your *Domain Name*, then and click **Register**
-- Copy and paste *Key* into `config/secrets.js`
-
-<hr>
-
-<img src="https://raw.github.com/mailgun/media/master/Mailgun_Primary.png" width="200">
-- Go to http://www.mailgun.com
-- Sign up and add your *Domain Name*
-- From the domain overview, copy and paste the default SMTP *Login* and *Password* into `config/secrets.js`
 
 Project Structure
 -----------------
@@ -255,61 +90,6 @@ Project Structure
 
 :bangbang: **Note:** Although your main template - **layout.jade** only knows about `/css/styles.css` file, you should be editing **styles.less** stylesheet. Express will automatically generate minified **styles.css** whenever there are changes in LESS file. This is done via [less-middleware](https://github.com/emberfeather/less.js-middleware) node.js library.
 
-Useful Tools
-------------
-- [Jade Syntax Documentation by Example](http://naltatis.github.io/jade-syntax-docs/#attributes) - Even better than official Jade docs.
-- [HTML to Jade converter](http://html2jade.aaron-powell.com) - Extremely valuable when you need to quickly copy and paste HTML snippets from the web.
-- [JavascriptOO](http://www.javascriptoo.com/) - A directory of JavaScript libraries with examples, CDN links, statistics, and videos.
-
-Recommended Design
-------------------
-- [Google Bootstrap](http://todc.github.io/todc-bootstrap/) - Google-styled theme for Bootstrap.
-- [Font Awesome Icons](http://fortawesome.github.io/Font-Awesome/icons/) - It's already part of the Hackathon Starter, so use this page as a reference.
-- [Colors](http://clrs.cc) - a nicer color palette for the web.
-- [CSS Spinning Loaders](http://codepen.io/andymcfee/pen/ioskA) - spinning loader in CSS.
-- [SpinKit](http://tobiasahlin.com/spinkit/) - 8 awesome looking spinning loaders in CSS.
-- [Creative Button Styles](http://tympanus.net/Development/CreativeButtons/) - awesome button styles.
-- [3D Dropdown Menu](http://soulwire.github.io/Makisu/) - CSS3 3D Dropdown Menu that folds and unfolds.
-- [Creative Link Effects](http://tympanus.net/Development/CreativeLinkEffects/) - Beautiful link effects in CSS.
-- [Medium Scroll Effect](http://codepen.io/andreasstorm/pen/pyjEh) - Fade in/out header background image as you scroll.
-- [HTML5UP](http://html5up.net/) - Beautifully designed HTML templates.
-
-Recommended Node.js Libraries
------------------------------
-- [nodemon](https://github.com/remy/nodemon) - automatically restart node.js server on code change.
-- [geoip-lite](https://github.com/bluesmoon/node-geoip) - get geolocation coordinates from IP address.
-- [Nodemailer](https://github.com/andris9/Nodemailer) - send emails with node.js (without sendgrid or mailgun).
-- [filesize.js](http://filesizejs.com/) - make file size pretty, e.g. `filesize(265318); // "265.32 kB"`.
-- [Numeral.js](http://numeraljs.com) - a javascript library for formatting and manipulating numbers.
-
-Recommended Client-Side libraries
----------------------------------
-- [Hover](https://github.com/IanLunn/Hover) - Awesome css3 animations on mouse hover.
-- [platform.js](https://github.com/bestiejs/platform.js) - Get client's operating system name, version, and other useful information.
-- [Magnific Popup](http://dimsemenov.com/plugins/magnific-popup/) - Responsive jQuery Lightbox Plugin.
-- [jQuery Raty](http://wbotelhos.com/raty/) - Star Rating Plugin.
-- [Headroom.js](http://wicky.nillia.ms/headroom.js/) - Hide your header until you need it.
-- [Fotorama](http://fotorama.io) - Very nice jQuery gallery.
-- [X-editable](http://vitalets.github.io/x-editable/) - Edit form elements inline.
-- [Offline.js](http://github.hubspot.com/offline/docs/welcome/) - Detect when user's internet connection goes offline.
-- [Color Thief](https://github.com/lokesh/color-thief) - Grabs the dominant color or a representative color palette from an image.
-- [Alertify.js](http://fabien-d.github.io/alertify.js/) - Sweet looking alerts and browser dialogs.
-- [select.js](http://github.hubspot.com/select/docs/welcome/) - Styleable select elements.
-- [drop.js](http://github.hubspot.com/drop/docs/welcome/) -  Powerful Javascript and CSS library for creating dropdowns and other floating displays.
-- [scrollReveal.js](https://github.com/julianlloyd/scrollReveal.js) - Declarative on-scroll reveal animations.
-
-Pro Tips
---------
-- When you install a new npm package, add a *--save* flag and it will be automatially
-added to `package.json` as well. For example, `npm install --save moment`.
-- Use [async.parallel()](https://github.com/caolan/async#parallel) when you neeed to run multiple
-asynchronous tasks, and then render a page, but only when all tasks are completed. For example, you might
-want to scrape 3 different websites for some data (async operation) and render the results
-on a page after all 3 websites have been scraped.
-- Need to find a specific object inside an Array? Use [_.findWhere](http://underscorejs.org/#findWhere) function from Underscore.js. For example, this is how you would retrieve a Twitter token from database: `var token = _.findWhere(req.user.tokens, { kind: 'twitter' });`, where `req.user.tokens` is an Array, and a second parameter is an object with a given key/value.
-- If you right click and select **View Page Source**, notice how *Express*
-minified HTML for you. If you would like to see non-minified markup,
-add `app.locals.pretty = true;` to **app.js** with the rest of the Express configuration.
 
 FAQ
 ---
@@ -411,12 +191,6 @@ which in itself is not a trivial task. And then there is a whole different proce
 for authentication with single page applications. If you insist on using
 a client-side framework, it's best if you use a boilerplate of choice for your particular
 client-side framework and just grab the pieces you need from the Hackathon Starter.
-
-### Why is there no Mozilla Persona as a sign-in option?
-If you would like to use **Persona** authentication strategy, use the [pull request #64](https://github.com/sahat/hackathon-starter/pull/64) as
-a reference guide. I have explained my reasons why it could not be merged into the *Hackathon Starter* in
-[issue #63](https://github.com/sahat/hackathon-starter/issues/63#issuecomment-34898290).
-
 
 
 ### How do I switch SendGrid for another email delivery service?
