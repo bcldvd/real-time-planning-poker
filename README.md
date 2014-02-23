@@ -1,6 +1,11 @@
 Real Time Planning Poker
 =================
 
+
+![Alt](http://cl.ly/image/3M1w2J1l1A0v/Capture%20d%E2%80%99e%CC%81cran%202014-02-23%20a%CC%80%2012.04.49.png)
+
+![Alt](http://cl.ly/image/3542211m0A37/Capture%20d%E2%80%99e%CC%81cran%202014-02-23%20a%CC%80%2012.06.26.png)
+
 Table of Contents
 -----------------
 - [Features](#features)
