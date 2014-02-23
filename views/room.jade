@@ -1,14 +1,14 @@
 extends layout
 
 block content
-	h1 Welcome to your private room 
+	h1(data-room='#{room}') Welcome to your private room 
 	p.lead
 		a(href='/room/#{room}') Share the link to your collaborators ➔
 	div.panel.panel-default
 		div.panel-heading
 			h3.panel-title Participants
-		div#participants.panel-body
-			| 
+		div.panel-body
+			ul#participants
 	a.btn.btn-success.btn-lg.btn-block(type='button', href='/room/#{room}/game') Get planning !
 
 

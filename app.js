@@ -171,19 +171,69 @@ server.listen(app.get('port'), function() {
 });
 
 /**
-* Socket.IO configuration
+* Socket.IO configuration 
 */
 
 io.configure(function() {
-  io.set('transports', ['websocket']);
+  io.enable('browser client minification');  // send minified client
+  io.enable('browser client etag');          // apply etag caching logic based on version number
+  io.enable('browser client gzip');          // gzip the file
+  io.set('log level', 1);                    // reduce logging
+  io.set('transports', [                     // enable all transports (optional if you want flashsocket)
+      'websocket'
+    , 'flashsocket'
+    , 'htmlfile'
+    , 'xhr-polling'
+    , 'jsonp-polling'
+  ]);
 });
 
-io.sockets.on('connection', function(socket) {
-  socket.emit('greet', { hello: 'Hey, Mr.Client!' });
-  socket.on('respond', function(data) {
-    console.log(data);
-  });
-  socket.on('disconnect', function() {
-    console.log('Socket disconnected');
-  });
+// io.sockets.on('connection', function(socket) {
+//   socket.emit('message', 'Vous êtes bien connecté !');
+//   socket.on('respond', function(data) {
+//     console.log(data);
+//   });
+//   socket.on('disconnect', function() {
+//     console.log('Socket disconnected');
+//   });
+// });
+
+var buffer = [];
+var connectedClients = [];
+
+io.sockets.on('connection', function(client){
+  var Room = "";
+
+    client.on("setNickAndRoom", function(data, fn){
+      // On stocke les infos du client connecté en les faisant correspondre
+      connectedClient = new Object();
+      connectedClient.sessionId = client.sessionId;
+      connectedClient.nick = data.nick;
+
+      // On les stocke dans notre tabeau de clients connectés
+      connectedClients.push(connectedClient);
+      fn(connectedClients);
+      client.join(data.room);
+      Room = data.room;
+      //client.broadcast.to(Room).emit('connected', data.nick+' Just joined room');
+    });
+ 
+    client.on('message', function(message, fn){
+        var msg = message; //{ message: [client.sessionId, message] };
+        buffer.push(msg);
+        if (buffer.length > 15)
+          buffer.shift();
+        client.broadcast.to(Room).json.send(msg);
+        fn(msg);
+    });
+ 
+    client.on('disconnect', function(){
+      var i,c = null;
+      for(i=0;i<connectedClients.length;i++){
+        if(c.sessionId == this.sessionId){
+          connectedClients.splice(i,1);
+        }
+      }
+      //client.broadcast.to(Room).json.send({ msg: " just left"});
+    });
 });
