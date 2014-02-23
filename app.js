@@ -205,16 +205,19 @@ io.sockets.on('connection', function(client){
   var Room = "";
 
     client.on("setNickAndRoom", function(data, fn){
-      // On stocke les infos du client connecté en les faisant correspondre
+      // Correspondance between client's socket.IO info and actual nickname in an object
       connectedClient = new Object();
-      connectedClient.sessionId = client.sessionId;
+      connectedClient.sessionId = client.handshake.sessionID;
       connectedClient.nick = data.nick;
 
-      // On les stocke dans notre tabeau de clients connectés
+      // We gather our clients in our array
       connectedClients.push(connectedClient);
+      // And we return that array to new connected
       fn(connectedClients);
       client.join(data.room);
       Room = data.room;
+      console.log(data.nick+'(session Id = '+client.sessionId+') joined room '+data.room);
+      // Then we broadcast the new connection to the rest
       //client.broadcast.to(Room).emit('connected', data.nick+' Just joined room');
     });
  
@@ -230,8 +233,11 @@ io.sockets.on('connection', function(client){
     client.on('disconnect', function(){
       var i,c = null;
       for(i=0;i<connectedClients.length;i++){
-        if(c.sessionId == this.sessionId){
+        if(connectedClients[i].sessionId == this.sessionId){
+          console.log(connectedClients[i].nick+' disconnected (i = '+i+' | sessionId = '+connectedClients[i].sessionId+')');
+          client.broadcast.to(Room).emit('disconnected', connectedClients[i].nick+' Just left room');
           connectedClients.splice(i,1);
+          break;
         }
       }
       //client.broadcast.to(Room).json.send({ msg: " just left"});
