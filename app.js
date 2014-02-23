@@ -199,36 +199,38 @@ io.configure(function() {
 // });
 
 var buffer = [];
-var connectedClients = [];
+var people = {};
+var rooms = [];
 
 io.sockets.on('connection', function(client){
   var Room = "";
 
     // Connected Client tries to set his nickname and room
     client.on("setNickAndRoom", function(data, fn){
-      // Adding the nickname to the socket
-      client.set('nickname', data.nick, function(){
-        // Usual set is not working so this is a workaround
-        client['nickname'] = data.nick;
+      // Adding the client's info the array
+      people[client.id] = {"name" : data.nick, "inroom": data.room};
 
-        // Adding the client to the room
-        client.join(data.room);
+      // Adding the client to the room
+      client.join(data.room);
 
-        // Getting the username of all clients of the room
-        var clientsInRoom = [];
-        io.sockets.clients(data.room).forEach(function(client) {
-          clientsInRoom.push(client['nickname']);
-        });
-
-        // Responding with the list of clients connected
-        fn(clientsInRoom);
-
-        // Update list of participants to others
-        client.broadcast.to(Room).emit('update', clientsInRoom);
-
-        //console.log(io.sockets.clients(data.room));
-        console.log(data.nick+' joined room '+data.room);
+      // Store the info of the clients in the rooms array
+      io.sockets.clients(data.room).forEach(function(client) {
+        var c = [];
+        c[data.room] = client.id;
+              console.log(c);
+        rooms.push(c);
       });
+      console.log(rooms);
+      console.log(getPeopleInRoom(data.room));
+
+      // Responding with the list of clients connected
+      //fn(clientsInRoom);
+
+      // Update list of participants to others
+      //client.broadcast.to(Room).emit('update', clientsInRoom);
+
+      //console.log(io.sockets.clients(data.room));
+      //console.log(people[client.id].name+' joined room '+data.room);
 
       // Then we broadcast the new connection to the rest
       //client.broadcast.to(Room).emit('connected', data.nick+' Just joined room');
