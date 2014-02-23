@@ -56,17 +56,30 @@ function Chat(){
 
   		//Connection
   		socket.on('connect',function (data) {
+  			// Once connected, send nick and room
 	    	socket.emit('setNickAndRoom', {nick: nick, room: room}, function(response){
-	    		// List of the different participants
-	    		response.forEach(function(client) {
-	    			$("#participants").append("<li>" + client.nick + "</li>");
-	    		});
+	    		// Print out the list of the different participants
+	    		var i = null;
+	    		for(i=0;i<response.length;i++){
+	    			$("#participants").append("<li>" + response[i] + "</li>");
+	    		}
 	    	});
   		});
 
   		//Connected
   		socket.on("connected", function(msg, p, c){
   			$("#participants").append("<li>" + msg + "</li>");
+  		});
+
+  		// Update
+  		socket.on("update", function(clientsInRoom){
+  			// Clear the list of participants
+  			$("#participants").html('');
+  			// List all again
+  			var i = null;
+    		for(i=0;i<clientsInRoom.length;i++){
+    			$("#participants").append("<li>" + clientsInRoom[i] + "</li>");
+    		}
   		});
   	};
   	

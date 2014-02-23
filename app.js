@@ -204,19 +204,32 @@ var connectedClients = [];
 io.sockets.on('connection', function(client){
   var Room = "";
 
+    // Connected Client tries to set his nickname and room
     client.on("setNickAndRoom", function(data, fn){
-      // Correspondance between client's socket.IO info and actual nickname in an object
-      connectedClient = new Object();
-      connectedClient.sessionId = client.handshake.sessionID;
-      connectedClient.nick = data.nick;
+      // Adding the nickname to the socket
+      client.set('nickname', data.nick, function(){
+        // Usual set is not working so this is a workaround
+        client['nickname'] = data.nick;
 
-      // We gather our clients in our array
-      connectedClients.push(connectedClient);
-      // And we return that array to new connected
-      fn(connectedClients);
-      client.join(data.room);
-      Room = data.room;
-      console.log(data.nick+'(session Id = '+client.sessionId+') joined room '+data.room);
+        // Adding the client to the room
+        client.join(data.room);
+
+        // Getting the username of all clients of the room
+        var clientsInRoom = [];
+        io.sockets.clients(data.room).forEach(function(client) {
+          clientsInRoom.push(client['nickname']);
+        });
+
+        // Responding with the list of clients connected
+        fn(clientsInRoom);
+
+        // Update list of participants to others
+        client.broadcast.to(Room).emit('update', clientsInRoom);
+
+        //console.log(io.sockets.clients(data.room));
+        console.log(data.nick+' joined room '+data.room);
+      });
+
       // Then we broadcast the new connection to the rest
       //client.broadcast.to(Room).emit('connected', data.nick+' Just joined room');
     });
@@ -231,15 +244,8 @@ io.sockets.on('connection', function(client){
     });
  
     client.on('disconnect', function(){
-      var i,c = null;
-      for(i=0;i<connectedClients.length;i++){
-        if(connectedClients[i].sessionId == this.sessionId){
-          console.log(connectedClients[i].nick+' disconnected (i = '+i+' | sessionId = '+connectedClients[i].sessionId+')');
-          client.broadcast.to(Room).emit('disconnected', connectedClients[i].nick+' Just left room');
-          connectedClients.splice(i,1);
-          break;
-        }
-      }
+      // remove the username from global usernames list
+      console.log(client['nickname']+' left');
       //client.broadcast.to(Room).json.send({ msg: " just left"});
     });
 });
