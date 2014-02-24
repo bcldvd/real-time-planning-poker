@@ -194,13 +194,17 @@ io.sockets.on('connection', function(socket) {
 	console.log(socket.id+' : Socket connected');
 	// We stock socket's id in the people array with "user" as it's name
 	people[socket.id] = {"name" : 'user'};
-	// Then broadcast the array in order to list all participants in main.js
+	// Send the list of participants to newly connected socket
 	socket.emit('participants', {people: people, id: socket.id});
-	socket.broadcast.emit('participants', {people: people});
+	// Then broadcast the array in order to list all participants in main.js
+	socket.broadcast.emit('participants', {people: people, connect: people[socket.id].name});
 
+	// If someones disconnects
 	socket.on('disconnect', function() {
-		delete people[socket.id];	
-		socket.broadcast.emit('participants', {people: people});
+		// Delete it's reference in the people array
+		delete people[socket.id];
+		// Then broadcast that someone disconnected, with the remaining participants
+		socket.broadcast.emit('participants', {people: people, disconnect: 'user'});
 		console.log(socket.id+' : Socket disconnected');
 	});
 });

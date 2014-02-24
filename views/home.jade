@@ -1,14 +1,52 @@
 extends layout
 
 block content
-	h1 Real Time Planning Poker
-	p.lead
-		| Planning Poker is a way to estimate a relative effort for a given task.
-		br
-		| This implementation was build upon new technologies such as NodeJS, Socket.IO...
-	a#getPlanning.btn.btn-success.btn-lg.btn-block(type='button') Get planning !
+	div#preGame
+		h1 Real Time Planning Poker
+		p.lead
+			| Planning Poker is a way to estimate a relative effort for a given task.
+			br
+			| This implementation was build upon new technologies such as NodeJS, Socket.IO...
+		a#getPlanning.btn.btn-success.btn-lg.btn-block(type='button') Get planning !
 
 	div#game.row
-		div.col-md-10 
+		div.col-md-10
+			h2#userStory User Story
+			.input-group
+				span.input-group-addon ✍
+				input#username.form-control(type='text', placeholder='User story')
+
+			div#progressBar.progress.progress-striped.active
+				div.progress-bar(role='progressbar', aria-valuenow='0', aria-valuemin='0', aria-valuemax='100', style='width: 0%')
+					span.sr-only 0% Complete
+
+			div#cardsSelection.row
+				div.col-md-1 
+					button.btn.btn-default(type='button') 0
+				div.col-md-1 
+					button.btn.btn-default(type='button') 1/2
+				div.col-md-1 
+					button.btn.btn-default(type='button') 1
+				div.col-md-1 
+					button.btn.btn-default(type='button') 2
+				div.col-md-1 
+					button.btn.btn-default(type='button') 3
+				div.col-md-1 
+					button.btn.btn-default(type='button') 5
+				div.col-md-1 
+					button.btn.btn-default(type='button') 8
+				div.col-md-1 
+					button.btn.btn-default(type='button') 13
+				div.col-md-1 
+					button.btn.btn-default(type='button') 20
+				div.col-md-1 
+					button.btn.btn-default(type='button') 40
+				div.col-md-1 
+					button.btn.btn-default(type='button') 100
+				div.col-md-1 
+					button.btn.btn-default(type='button') ?
+
 		div.col-md-2 
 			ul#participants.list-group
+
+	div#alerts

@@ -125,10 +125,37 @@ body {
 // Home
 // -------------------------
 
+#preGame{
+	//display: none;
+}
+
 #game{
-//  display:none;
+	// Hide the game until the get planning button is pressed
+  display:none;
+	
+	h2#userStory{
+		display:none;
+	}
+
+	#progressBar{
+		margin:5px 0;
+	}
+
+	#cardsSelection{
+		button{
+			width: 100%;
+		}
+	}
+
   li{
 	word-wrap: break-word;
 	//height: 35px;
   }
+}
+
+#alerts{
+	position: absolute;
+	top: 50px;
+	right: 50px;
+	min-width: 200px;
 }
