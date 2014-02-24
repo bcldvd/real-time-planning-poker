@@ -126,12 +126,12 @@ body {
 // -------------------------
 
 #preGame{
-	//display: none;
+	display: none;
 }
 
 #game{
 	// Hide the game until the get planning button is pressed
-  display:none;
+  //display:none;
 	
 	h2#userStory{
 		display:none;
@@ -178,6 +178,11 @@ body {
 	#participants{
 		li{
 			word-wrap: break-word;
+
+		}
+		.activePlayer:hover{
+			cursor: pointer;
+			font-style: italic;
 		}
 	}
 }

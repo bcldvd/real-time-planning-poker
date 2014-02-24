@@ -49,7 +49,7 @@ $(document).ready(function() {
 			if (data.people.hasOwnProperty(i)) {
 				// Differentiate current client
 				if(i == id){
-					$('#participants').append('<li class="list-group-item list-group-item-success">✎ '+data.people[i].name+'</li>');					
+					$('#participants').append('<li class="list-group-item list-group-item-success activePlayer notChangingName">'+data.people[i].name+'</li>');					
 				}else{
 					$('#participants').append('<li class="list-group-item">'+data.people[i].name+'</li>');
 				}
@@ -66,7 +66,6 @@ $(document).ready(function() {
 
 	socket.on('cardSelected', function(people){
 		displayCards(people);
-		console.log('you chose '+people[id].card);
 	});
 
 
@@ -122,11 +121,55 @@ $(document).ready(function() {
 		// Send it to the server
 		socket.emit('cardSelected', cardValue);
 
-		//console.log(cardValue);
-		//alert(cardValue+' selected');
+		// Prevent default action
 		event.preventDefault();
 	});
 
+	/**
+	* Change username
+	*/
+	// Since the elements do not exist yet, we have to use 'on' instead of just 'hover'
+	$('#participants').on('mouseenter', '.activePlayer', function() {
+		$(this).removeClass('list-group-item-success');
+		$(this).addClass('list-group-item-warning');
+	}).on('mouseleave', '.activePlayer', function() {
+		$(this).removeClass('list-group-item-warning');
+		$(this).addClass('list-group-item-success');
+	});
+
+	$('#participants').on('click','.notChangingName',function(e){
+		// We stock it's current name
+		var currentName = $(this).html();
+
+		// And add the form with it's name
+		var input = '<form id="changeName">'
+			+'<div class="input-group">'
+				+'<input id="username" type="text" placeholder="'+currentName+'" class="form-control" autofocus>'
+			+'</div>'
+		+'</form>';
+		$(this).html(input);
+
+		// Then change the class in order to prevent more input to come
+		$(this).removeClass('notChangingName');
+		$(this).addClass('changingName');
+		e.preventDefault();
+	});
+
+	// When the name is chosen send it to the server
+	$('#participants').on('submit', '#changeName',function(e){
+		// Get the new name
+		var newName = $(this).find('input').val();
+
+		// Send it to the server
+		socket.emit('newName', newName);
+
+		// Following is irrelevant since the list is going to be re-generated
+		$(this).parent().html(newName);
+		$(this).parent().removeClass('changingName');
+		$(this).parent().addClass('notChangingName');
+		$(this).remove();
+		e.preventDefault();
+	});
 
 });
 
@@ -187,13 +230,11 @@ function displayCards(people){
 	// Initialize vars
 	var count = 0;
 	var i;
-	console.log(people);
 
 	for (i in people) {
 		if (people.hasOwnProperty(i)) {
 			// Check only people who chose cards
 			if(people[i].card !== undefined){
-				console.log(people[id].card);
 				// Differentiate current client
 				if(i == id){
 					$('#cardsResult').append('<li><span>'+people[i].name+'</span>'
@@ -212,8 +253,10 @@ function displayCards(people){
 			}
 		}
 	}
+
 	// Getting progression Status
 	var progress = (100*count)/participants;
+
 	// If the progress is at 100%, display the Reveal Cards Button
 	if(progress == 100 && cardsButtonDisplayed == false){
 		$('#progressBar').hide();
@@ -221,20 +264,20 @@ function displayCards(people){
 		// Then update variables to know where we're at
 		cardsButtonDisplayed = true;
 		progressBarDisplayed = false;
-	// If the progress is less than 100% change progress bar display
-	}else{
-		// if the bar is already displayed, just update it
-		if(progressBarDisplayed == true){
-			$('#progressBar div').css('width', progress+'%');
-		// If the bar is hidden, show the bar and remove the Reveal Cards button
-		}else{
-			$('#progressBar').show().css('width', progress+'%');
-			$('#revealCards').remove();
-			// Then update variables to know where we're at
-			cardsButtonDisplayed = false;
-			progressBarDisplayed = true;
-		}
+	// If the progress is not at 100% but the reveal Cards button is set, delete it
+	}else if(progress != 100 && cardsButtonDisplayed == true) {
+		$('#progressBar').show();
+		$('#progressBar div').css('width', progress+'%');
+		$('#revealCards').remove();
+		// Then update variables to know where we're at
+		cardsButtonDisplayed = false;
+		progressBarDisplayed = true;
+	// If the progress is not at 100%, update the bar
+	}else if(progress != 100) {
+		$('#progressBar div').css('width', progress+'%');
 	}
 }
+
+
 
 

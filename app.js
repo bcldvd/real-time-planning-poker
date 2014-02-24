@@ -204,7 +204,15 @@ io.sockets.on('connection', function(socket) {
 	socket.emit('participants', {people: people, id: socket.id});
 	// Then broadcast the array in order to list all participants in main.js
 	socket.broadcast.emit('participants', {people: people, connect: people[socket.id].name});
-	console.log(people);
+
+	/**
+	 * Client changes his name
+	 */
+	 socket.on('newName',function(newName){
+	 	people[socket.id].name = newName;
+	 	socket.emit('participants', {people: people});
+	 	socket.broadcast.emit('participants', {people: people});
+	 });
 
 	/**
 	 * Client chooses his cards
