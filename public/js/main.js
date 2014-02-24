@@ -68,6 +68,12 @@ $(document).ready(function() {
 		displayCards(people);
 	});
 
+	/**
+	* Update User Story
+	*/
+	socket.on('newUserStory', function(userStory){
+		updateUserStory(userStory);
+	});
 
 
 
@@ -128,6 +134,7 @@ $(document).ready(function() {
 	/**
 	* Change username
 	*/
+
 	// Since the elements do not exist yet, we have to use 'on' instead of just 'hover'
 	$('#participants').on('mouseenter', '.activePlayer', function() {
 		$(this).removeClass('list-group-item-success');
@@ -170,6 +177,33 @@ $(document).ready(function() {
 		$(this).remove();
 		e.preventDefault();
 	});
+
+
+	/**
+	* Change User Story
+	*/
+
+	// Update user story (visually and to server)
+	$(document).on('submit', '#userStoryForm',function(e){
+		// Get the new User Story
+		var userStory = $(this).find('input').val();
+
+		// Hide the form and show the new User Story
+		//updateUserStory(userStory);
+		
+		// Send it to the server
+		socket.emit('newUserStory', userStory);
+
+		e.preventDefault();
+	});
+
+	// get the form back
+	$('#userStory').click(function(e){
+		var userStory = $(this).html();
+		changeUserStory();
+
+		e.preventDefault();
+	})
 
 });
 
@@ -278,6 +312,18 @@ function displayCards(people){
 	}
 }
 
+function updateUserStory(userStory){
+	$('#userStory').html(userStory).show();
+	$('#userStoryForm').hide();
+}
 
+function changeUserStory(){
+	var oldUserStory = $('#userStory').html();
+	$('#userStoryForm').find('input').attr('placeholder', oldUserStory).val(''); 
+	$('#userStoryForm').show(function(){
+		$('#userStoryForm').find('input').focus();
+	});
+	$('#userStory').hide();
+}
 
 

@@ -11,7 +11,7 @@ html, body {
 }
 
 body {
-  padding-top: 70px;
+  //padding-top: 70px;
 }
 
 #wrap {
@@ -135,6 +135,11 @@ body {
 	
 	h2#userStory{
 		display:none;
+		margin-top: 0;
+	}
+	h2#userStory:hover{
+		cursor:pointer;
+			font-style: italic;
 	}
 
 	// Progress bar : 100% width when all users selected their cards
@@ -144,8 +149,13 @@ body {
 
 	// Selection of the card value
 	#cardsSelection{
+		div{
+			margin:0.5em 0;
+		}
 		button{
 			width: 100%;
+			padding-left: 0;
+			padding-right: 0;
 		}
 	}
 

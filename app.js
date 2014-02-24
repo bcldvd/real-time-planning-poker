@@ -192,6 +192,7 @@ io.configure(function() {
 });
 
 var people = {};
+var currentUserStory = undefined;
 
 io.sockets.on('connection', function(socket) {
 	/**
@@ -202,6 +203,10 @@ io.sockets.on('connection', function(socket) {
 	people[socket.id] = {"name" : randomNames.names[Math.floor(Math.random() * 49) + 1].name};
 	// Send the list of participants to newly connected socket
 	socket.emit('participants', {people: people, id: socket.id});
+	// Send the current User Story if one is already here
+	if (currentUserStory != undefined) {
+	 	socket.emit('newUserStory', currentUserStory);
+	}
 	// Then broadcast the array in order to list all participants in main.js
 	socket.broadcast.emit('participants', {people: people, connect: people[socket.id].name});
 
@@ -215,12 +220,22 @@ io.sockets.on('connection', function(socket) {
 	 });
 
 	/**
-	 * Client chooses his cards
+	 * Client chooses his card
 	 */
 	 socket.on('cardSelected',function(card){
 	 	people[socket.id].card = card;
 	 	socket.emit('cardSelected', people);
 	 	socket.broadcast.emit('cardSelected', people);
+	 });
+
+	/**
+	 * Client changes User Story
+	 */
+
+	 socket.on('newUserStory', function(userStory){
+	 	socket.emit('newUserStory', userStory);
+	 	socket.broadcast.emit('newUserStory', userStory);
+	 	currentUserStory = userStory;
 	 });
 
 
