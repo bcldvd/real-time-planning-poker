@@ -1,3 +1,5 @@
+	var id = undefined;
+	var card = null;
 $(document).ready(function() {
 	
 	/**
@@ -5,16 +7,14 @@ $(document).ready(function() {
 	* ________________________
 	*/
 	var socket = io.connect(window.location.href);
-	var id = undefined;
 
-	socket.on('greet', function (data) {
-		console.log(data);
-		$('#participants').append('<li class="list-group-item">user1</li>');
-	});
+
+	/**
+	* Participants
+	*/
 
 	// Everytime a new person joins or leave, update the participant's list
 	socket.on('participants', function (data) {
-		console.log(data);
 		// Clear the participant's list
 		$('#participants').html('');
 
@@ -25,36 +25,42 @@ $(document).ready(function() {
 
 		// Send a alert for a connection
 		if(data.connect !== undefined){
-			var alert = newAlert('success','A '+data.connect+' just joined');
+			var alert = newAlert('success', data.connect+' just joined');
 			$('#alerts').append(alert.alert);
 			removeAlert(alert.id);
 		}
 
 		// Send a alert for a disconnection
 		if(data.disconnect !== undefined){
-			var alert = newAlert('danger','A '+data.disconnect+' just left');
+			var alert = newAlert('danger', data.disconnect+' just left');
 			$('#alerts').append(alert.alert);
 			removeAlert(alert.id);
 		}
 
 		// Initialize vars
-		var count = 0;
 		var i;
 
 		for (i in data.people) {
 			if (data.people.hasOwnProperty(i)) {
 				// Differentiate current client
 				if(i == id){
-					$('#participants').append('<li class="list-group-item list-group-item-success">✎ user '+(count+1)+'</li>');					
+					$('#participants').append('<li class="list-group-item list-group-item-success">✎ '+data.people[i].name+'</li>');					
 				}else{
-					$('#participants').append('<li class="list-group-item">user '+(count+1)+'</li>');
+					$('#participants').append('<li class="list-group-item">'+data.people[i].name+'</li>');
 				}
-				console.log();
-				count++;
 			}
 		}
-		console.log(count+ ' participants');
 	});
+
+	/**
+	* Selected Cards
+	*/
+
+	socket.on('cardSelected', function(people){
+		displayCards(people);
+		console.log('you chose '+people[id].card);
+	});
+
 
 
 
@@ -97,6 +103,23 @@ $(document).ready(function() {
 	});
 
 
+	/**
+	* Select card
+	*/
+
+	$('.cardSelection').click(function(event){
+		// Get the selected card value
+		var cardValue = $(this).html();
+
+		// Send it to the server
+		socket.emit('cardSelected', cardValue);
+
+		//console.log(cardValue);
+		//alert(cardValue+' selected');
+		event.preventDefault();
+	});
+
+
 });
 
 
@@ -131,7 +154,7 @@ function newAlert(type, msg){
 	+'<button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button>'
 	+'<p>'+msg+'</p>'
 	+'</div>';
-	
+
 	// Send the resulting object
 	var data = {};
 	data.id = id;
@@ -148,3 +171,35 @@ function removeAlert(id){
 		$('#'+id).remove();
 	}, 2000);
 }
+
+function displayCards(people){
+	console.log(people);
+	// Clear the current cards
+	$('#cardsResult').html('');
+
+	// Initialize vars
+	var count = 0;
+	var i;
+
+	for (i in people) {
+		if (people.hasOwnProperty(i)) {
+			// Differentiate current client
+			if(i == id){
+				$('#cardsResult').append('<li><span>'+people[i].name+'</span>'
+					+'<div data-card="'+people[i].card+'" class="bg-success">'
+						+'<p>'+people[i].card+'</p>'
+					+'</div>'
+				+'</li>');					
+			}else{
+				$('#cardsResult').append('<li><span>'+people[i].name+'</span>'
+					+'<div data-card="'+people[i].card+'" class="bg-danger">'
+						+'<p></p>'
+					+'</div>'
+				+'</li>');				}
+			console.log();
+			count++;
+		}
+	}
+}
+
+

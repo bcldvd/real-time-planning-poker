@@ -137,22 +137,52 @@ body {
 		display:none;
 	}
 
+	// Progress bar : 100% width when all users selected their cards
 	#progressBar{
 		margin:5px 0;
 	}
 
+	// Selection of the card value
 	#cardsSelection{
 		button{
 			width: 100%;
 		}
 	}
 
-  li{
-	word-wrap: break-word;
-	//height: 35px;
-  }
+	// Big list containing all selected cards of the users
+	#cardsResult{
+		padding: 10px;
+		min-height: 100px;
+
+		li{
+			float: left;
+			list-style-type: none;
+			width: 6em;
+			text-align: center;
+			margin: 1em;
+
+			div{
+				height: 7em;
+				border-radius: 0.5em;
+				border: 0.15em solid;
+
+				p{
+					font-size: 3em;
+					padding: 0.4em 0;
+				}
+			}
+		}
+	}
+
+	// List of online users
+	#participants{
+		li{
+			word-wrap: break-word;
+		}
+	}
 }
 
+// Alerts placement
 #alerts{
 	position: absolute;
 	top: 50px;

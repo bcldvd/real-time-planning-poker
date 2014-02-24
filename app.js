@@ -18,7 +18,6 @@ var homeController = require('./controllers/home');
 var userController = require('./controllers/user');
 var apiController = require('./controllers/api');
 var contactController = require('./controllers/contact');
-var roomController = require('./controllers/room');
 
 /**
  * API keys + Passport configuration.
@@ -26,6 +25,11 @@ var roomController = require('./controllers/room');
 
 var secrets = require('./config/secrets');
 var passportConf = require('./config/passport');
+
+/**
+ * List of random names
+ */
+var randomNames = require('./config/names');
 
 /**
  * Create Express server & Socket.IO
@@ -99,8 +103,6 @@ app.use(express.errorHandler());
  */
 
 app.get('/', homeController.index);
-app.get('/room/:room', roomController.room);
-app.get('/room/:room/game', roomController.game);
 app.get('/login', userController.getLogin);
 app.post('/login', userController.postLogin);
 app.get('/logout', userController.logout);
@@ -171,7 +173,8 @@ server.listen(app.get('port'), function() {
 });
 
 /**
-* Socket.IO configuration 
+* Socket.IO
+* ________________________
 */
 
 io.configure(function() {
@@ -191,21 +194,39 @@ io.configure(function() {
 var people = {};
 
 io.sockets.on('connection', function(socket) {
+	/**
+	 * Newly connected client
+	 */
 	console.log(socket.id+' : Socket connected');
 	// We stock socket's id in the people array with "user" as it's name
-	people[socket.id] = {"name" : 'user'};
+	people[socket.id] = {"name" : randomNames.names[Math.floor(Math.random() * 49) + 1].name};
 	// Send the list of participants to newly connected socket
 	socket.emit('participants', {people: people, id: socket.id});
 	// Then broadcast the array in order to list all participants in main.js
 	socket.broadcast.emit('participants', {people: people, connect: people[socket.id].name});
+	console.log(people);
 
+	/**
+	 * Client chooses his cards
+	 */
+	 socket.on('cardSelected',function(card){
+	 	people[socket.id].card = card;
+	 	socket.emit('cardSelected', people);
+	 	socket.broadcast.emit('cardSelected', people);
+	 });
+
+
+
+	/**
+	 * Client disconnects
+	 */
 	// If someones disconnects
 	socket.on('disconnect', function() {
+		var user = people[socket.id].name;
 		// Delete it's reference in the people array
 		delete people[socket.id];
 		// Then broadcast that someone disconnected, with the remaining participants
-		socket.broadcast.emit('participants', {people: people, disconnect: 'user'});
+		socket.broadcast.emit('participants', {people: people, disconnect: user});
 		console.log(socket.id+' : Socket disconnected');
 	});
 });
-

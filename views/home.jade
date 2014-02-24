@@ -10,7 +10,7 @@ block content
 		a#getPlanning.btn.btn-success.btn-lg.btn-block(type='button') Get planning !
 
 	div#game.row
-		div.col-md-10
+		div.col-md-10.clearfix
 			h2#userStory User Story
 			.input-group
 				span.input-group-addon ✍
@@ -21,30 +21,33 @@ block content
 					span.sr-only 0% Complete
 
 			div#cardsSelection.row
-				div.col-md-1 
-					button.btn.btn-default(type='button') 0
-				div.col-md-1 
-					button.btn.btn-default(type='button') 1/2
-				div.col-md-1 
-					button.btn.btn-default(type='button') 1
-				div.col-md-1 
-					button.btn.btn-default(type='button') 2
-				div.col-md-1 
-					button.btn.btn-default(type='button') 3
-				div.col-md-1 
-					button.btn.btn-default(type='button') 5
-				div.col-md-1 
-					button.btn.btn-default(type='button') 8
-				div.col-md-1 
-					button.btn.btn-default(type='button') 13
-				div.col-md-1 
-					button.btn.btn-default(type='button') 20
-				div.col-md-1 
-					button.btn.btn-default(type='button') 40
-				div.col-md-1 
-					button.btn.btn-default(type='button') 100
-				div.col-md-1 
-					button.btn.btn-default(type='button') ?
+				div.col-md-1.col-xs-1
+					button.btn.btn-default.cardSelection(type='button') 0
+				div.col-md-1.col-xs-1
+					button.btn.btn-default.cardSelection(type='button') 1/2
+				div.col-md-1.col-xs-1
+					button.btn.btn-default.cardSelection(type='button') 1
+				div.col-md-1.col-xs-1
+					button.btn.btn-default.cardSelection(type='button') 2
+				div.col-md-1.col-xs-1
+					button.btn.btn-default.cardSelection(type='button') 3
+				div.col-md-1.col-xs-1
+					button.btn.btn-default.cardSelection(type='button') 5
+				div.col-md-1.col-xs-1
+					button.btn.btn-default.cardSelection(type='button') 8
+				div.col-md-1.col-xs-1
+					button.btn.btn-default.cardSelection(type='button') 13
+				div.col-md-1.col-xs-1
+					button.btn.btn-default.cardSelection(type='button') 20
+				div.col-md-1.col-xs-1
+					button.btn.btn-default.cardSelection(type='button') 40
+				div.col-md-1.col-xs-1
+					button.btn.btn-default.cardSelection(type='button') 100
+				div.col-md-1.col-xs-1
+					button.btn.btn-default.cardSelection(type='button') ?
+
+			ul#cardsResult
+
 
 		div.col-md-2 
 			ul#participants.list-group
