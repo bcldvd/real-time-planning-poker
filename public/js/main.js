@@ -1,5 +1,9 @@
-	var id = undefined;
-	var card = null;
+var id = undefined;
+var card = null;
+var participants = 0
+var cardsButtonDisplayed = false;
+var progressBarDisplayed = true;
+
 $(document).ready(function() {
 	
 	/**
@@ -39,6 +43,7 @@ $(document).ready(function() {
 
 		// Initialize vars
 		var i;
+		var count = 0;
 
 		for (i in data.people) {
 			if (data.people.hasOwnProperty(i)) {
@@ -48,8 +53,11 @@ $(document).ready(function() {
 				}else{
 					$('#participants').append('<li class="list-group-item">'+data.people[i].name+'</li>');
 				}
+				count++;
 			}
 		}
+		participants = count;
+		displayCards(data.people);
 	});
 
 	/**
@@ -173,31 +181,58 @@ function removeAlert(id){
 }
 
 function displayCards(people){
-	console.log(people);
 	// Clear the current cards
 	$('#cardsResult').html('');
 
 	// Initialize vars
 	var count = 0;
 	var i;
+	console.log(people);
 
 	for (i in people) {
 		if (people.hasOwnProperty(i)) {
-			// Differentiate current client
-			if(i == id){
-				$('#cardsResult').append('<li><span>'+people[i].name+'</span>'
-					+'<div data-card="'+people[i].card+'" class="bg-success">'
-						+'<p>'+people[i].card+'</p>'
-					+'</div>'
-				+'</li>');					
-			}else{
-				$('#cardsResult').append('<li><span>'+people[i].name+'</span>'
-					+'<div data-card="'+people[i].card+'" class="bg-danger">'
-						+'<p></p>'
-					+'</div>'
-				+'</li>');				}
-			console.log();
-			count++;
+			// Check only people who chose cards
+			if(people[i].card !== undefined){
+				console.log(people[id].card);
+				// Differentiate current client
+				if(i == id){
+					$('#cardsResult').append('<li><span>'+people[i].name+'</span>'
+						+'<div data-card="'+people[i].card+'" class="bg-success">'
+							+'<p>'+people[i].card+'</p>'
+						+'</div>'
+					+'</li>');					
+				}else{
+					$('#cardsResult').append('<li><span>'+people[i].name+'</span>'
+						+'<div data-card="'+people[i].card+'" class="bg-danger">'
+							+'<p></p>'
+						+'</div>'
+					+'</li>');
+				}
+				count++;
+			}
+		}
+	}
+	// Getting progression Status
+	var progress = (100*count)/participants;
+	// If the progress is at 100%, display the Reveal Cards Button
+	if(progress == 100 && cardsButtonDisplayed == false){
+		$('#progressBar').hide();
+		$('#progressBarArea').append('<button id="revealCards" type="button" class="btn btn-primary btn-lg btn-block animated flipInY">Reveal cards </button>');
+		// Then update variables to know where we're at
+		cardsButtonDisplayed = true;
+		progressBarDisplayed = false;
+	// If the progress is less than 100% change progress bar display
+	}else{
+		// if the bar is already displayed, just update it
+		if(progressBarDisplayed == true){
+			$('#progressBar div').css('width', progress+'%');
+		// If the bar is hidden, show the bar and remove the Reveal Cards button
+		}else{
+			$('#progressBar').show().css('width', progress+'%');
+			$('#revealCards').remove();
+			// Then update variables to know where we're at
+			cardsButtonDisplayed = false;
+			progressBarDisplayed = true;
 		}
 	}
 }
