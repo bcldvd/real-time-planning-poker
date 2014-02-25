@@ -1,6 +1,8 @@
 {
   "name": "real-time-planning-poker",
-  "version": "0.0.0",
+  "version": "0.9.0",
+  "author": "David Boclé",
+  "description": "poker planning with socket.io",
   "scripts": {
     "start": "node app.js"
   },
@@ -36,5 +38,6 @@
     "twilio": "~1.5.0",
     "validator": "~3.2.1",
     "socket.io": "~0.9.16"
-  }
+  },
+  "license": "MIT"
 }
