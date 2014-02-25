@@ -238,6 +238,14 @@ io.sockets.on('connection', function(socket) {
 	 	currentUserStory = userStory;
 	 });
 
+	 /**
+	 * Reveal cards to all clients
+	 */
+
+	 socket.on('revealCards', function(){
+	 	socket.emit('revealCards');
+	 	socket.broadcast.emit('revealCards');
+	 });
 
 
 	/**

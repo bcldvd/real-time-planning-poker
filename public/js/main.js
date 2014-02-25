@@ -3,6 +3,7 @@ var card = null;
 var participants = 0
 var cardsButtonDisplayed = false;
 var progressBarDisplayed = true;
+var playAgainButtonDisplayed = false;
 
 $(document).ready(function() {
 	
@@ -75,6 +76,13 @@ $(document).ready(function() {
 		updateUserStory(userStory);
 	});
 
+	/**
+	* Reveal Cards
+	*/
+	socket.on('revealCards', function(){
+		revealCards();
+	});
+
 
 
 	/**
@@ -108,7 +116,9 @@ $(document).ready(function() {
 
 		// Game Arrival effect 1500ms after
 		setTimeout(function() {
-			$('#game').show();
+			$('#game').show(function(){
+				$('#game').find('input').focus();
+			});
 			$('#game').addClass('animated flipInY');
 		}, 1500);
 
@@ -203,7 +213,16 @@ $(document).ready(function() {
 		changeUserStory();
 
 		e.preventDefault();
-	})
+	});
+
+	/**
+	* Reveal Cards
+	*/
+	$(document).on('click','#revealCards',function(e){
+		socket.emit('revealCards');
+		e.preventDefault();
+	});
+
 
 });
 
@@ -257,6 +276,27 @@ function removeAlert(id){
 	}, 2000);
 }
 
+function hideProgressBar(){
+	$('#progressBar').hide();
+	$('#progressBarArea').append('<button id="revealCards" type="button" class="btn btn-primary btn-lg btn-block animated flipInY">Reveal cards </button>');
+	// Then update variables to know where we're at
+	cardsButtonDisplayed = true;
+	progressBarDisplayed = false;
+}
+
+function showProgressBar(progress){
+	$('#progressBar').show();
+	updateProgressBar(progress);
+	$('#revealCards').remove();
+	// Then update variables to know where we're at
+	cardsButtonDisplayed = false;
+	progressBarDisplayed = true;
+}
+
+function updateProgressBar(progress){
+	$('#progressBar div').css('width', progress+'%');
+}
+
 function displayCards(people){
 	// Clear the current cards
 	$('#cardsResult').html('');
@@ -272,13 +312,13 @@ function displayCards(people){
 				// Differentiate current client
 				if(i == id){
 					$('#cardsResult').append('<li><span>'+people[i].name+'</span>'
-						+'<div data-card="'+people[i].card+'" class="bg-success">'
+						+'<div data-card="'+people[i].card+'" class="bg-success cards">'
 							+'<p>'+people[i].card+'</p>'
 						+'</div>'
 					+'</li>');					
 				}else{
 					$('#cardsResult').append('<li><span>'+people[i].name+'</span>'
-						+'<div data-card="'+people[i].card+'" class="bg-danger">'
+						+'<div data-card="'+people[i].card+'" class="bg-danger cards">'
 							+'<p></p>'
 						+'</div>'
 					+'</li>');
@@ -293,22 +333,15 @@ function displayCards(people){
 
 	// If the progress is at 100%, display the Reveal Cards Button
 	if(progress == 100 && cardsButtonDisplayed == false){
-		$('#progressBar').hide();
-		$('#progressBarArea').append('<button id="revealCards" type="button" class="btn btn-primary btn-lg btn-block animated flipInY">Reveal cards </button>');
-		// Then update variables to know where we're at
-		cardsButtonDisplayed = true;
-		progressBarDisplayed = false;
+		hideProgressBar();
 	// If the progress is not at 100% but the reveal Cards button is set, delete it
 	}else if(progress != 100 && cardsButtonDisplayed == true) {
-		$('#progressBar').show();
-		$('#progressBar div').css('width', progress+'%');
-		$('#revealCards').remove();
-		// Then update variables to know where we're at
-		cardsButtonDisplayed = false;
-		progressBarDisplayed = true;
+		showProgressBar(progress);
 	// If the progress is not at 100%, update the bar
 	}else if(progress != 100) {
-		$('#progressBar div').css('width', progress+'%');
+		updateProgressBar(progress);
+	}else if(playAgainButtonDisplayed == true){
+		cardValue();
 	}
 }
 
@@ -326,4 +359,55 @@ function changeUserStory(){
 	$('#userStory').hide();
 }
 
+function cardValue(){
+	// We check each data-card attribute
+	$('.cards').each(function(){
+		// We don't change our card because it is albready displayed
+		if($(this).hasClass('bg-success') == false){
+			// But everyone elses
+			var value = $(this).data('card');
+			$(this).find('p').html(value);
+			// And we also change the background
+			$(this).addClass('bg-primary').removeClass('bg-danger');
+		}
+	});
+}
+
+function revealCards(){
+	// Show the value of each card
+	cardValue();
+
+	// Change the "primary" background of button to "warning"
+	$('#revealCards').removeClass('btn-primary')
+	.addClass('btn-warning')
+	.html('Play Again (5)') // Change text with timer
+	.attr('disabled','disabled'); // Disable button (to prevent launching a new game without looking at cards)
+
+	playAgainButtonDisplayed = true;
+
+	// 5 seconds timer
+	setTimeout(function(){
+		$('#revealCards').html('Play Again (4)');
+	}, 1000);
+
+	setTimeout(function(){
+		$('#revealCards').html('Play Again (3)');
+	}, 2000);
+
+	setTimeout(function(){
+		$('#revealCards').html('Play Again (2)');
+	}, 3000);
+
+	setTimeout(function(){
+		$('#revealCards').html('Play Again (1)');
+	}, 4000);
+
+	// Enable play again after 5 seconds
+	setTimeout(function() {
+		$('#revealCards').removeAttr('disabled')
+		.removeClass('btn-warning')
+		.addClass('btn-info')
+		.html('Play Again !');
+	}, 5000);
+}
 
