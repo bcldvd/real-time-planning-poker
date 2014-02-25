@@ -83,6 +83,14 @@ $(document).ready(function() {
 		revealCards();
 	});
 
+	/**
+	* Play Again
+	*/
+	socket.on('playAgain', function(people){
+		playAgain(people);
+	});
+
+
 
 
 	/**
@@ -223,6 +231,16 @@ $(document).ready(function() {
 		e.preventDefault();
 	});
 
+	/**
+	* Reveal Cards
+	*/
+	$(document).on('click','#playAgain',function(e){
+		socket.emit('playAgain');
+		e.preventDefault();
+	});
+
+
+
 
 });
 
@@ -288,6 +306,7 @@ function showProgressBar(progress){
 	$('#progressBar').show();
 	updateProgressBar(progress);
 	$('#revealCards').remove();
+	$('#playAgain').remove();
 	// Then update variables to know where we're at
 	cardsButtonDisplayed = false;
 	progressBarDisplayed = true;
@@ -381,7 +400,8 @@ function revealCards(){
 	$('#revealCards').removeClass('btn-primary')
 	.addClass('btn-warning')
 	.html('Play Again (5)') // Change text with timer
-	.attr('disabled','disabled'); // Disable button (to prevent launching a new game without looking at cards)
+	.attr('disabled','disabled') // Disable button (to prevent launching a new game without looking at cards)
+
 
 	playAgainButtonDisplayed = true;
 
@@ -407,7 +427,14 @@ function revealCards(){
 		$('#revealCards').removeAttr('disabled')
 		.removeClass('btn-warning')
 		.addClass('btn-info')
-		.html('Play Again !');
+		.html('Play Again !')
+		.attr('id', 'playAgain'); // Change the id to "playAgain"
 	}, 5000);
+}
+
+function playAgain(people){
+	displayCards(people)
+	showProgressBar(0);
+	changeUserStory();
 }
 

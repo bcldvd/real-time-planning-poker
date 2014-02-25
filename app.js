@@ -247,6 +247,23 @@ io.sockets.on('connection', function(socket) {
 	 	socket.broadcast.emit('revealCards');
 	 });
 
+	 /**
+	 * Play Again
+	 */
+
+	 socket.on('playAgain', function(){
+	 	// Set all cards to undefined
+	 	var i;
+		for (i in people) {
+			if (people.hasOwnProperty(i)) {
+					people[i].card = undefined;
+			}
+		}
+	 	socket.emit('playAgain', people);
+	 	socket.broadcast.emit('playAgain', people);
+	 });
+
+
 
 	/**
 	 * Client disconnects
