@@ -1,6 +1,6 @@
-Real Time Planning Poker 
-=================
-Go no playing cards to do your planning poker ? No worries, in **less than 5 minutes** form now, you'll be ready to plan !
+# Real Time Planning Poker 
+
+Got no playing cards to do your planning poker ? No worries, in **less than 5 minutes** form now, you'll be ready to plan !
 
 ![Alt](http://f.cl.ly/items/0628021b2o3A2S2O3s1h/Capture%20d%E2%80%99e%CC%81cran%202014-02-25%20a%CC%80%2014.49.32.png)
 
@@ -8,10 +8,8 @@ Go no playing cards to do your planning poker ? No worries, in **less than 5 min
 
 ![Alt](http://f.cl.ly/items/2D0T0W130C1I1Z270F43/Capture%20d%E2%80%99e%CC%81cran%202014-02-25%20a%CC%80%2014.50.26.png)
 
-Real Time Planning Poker used [Sahat Yalkabov's projet](https://github.com/sahat/hackathon-starter) which is licensed under the [MIT License](http://www.opensource.org/licenses/mit-license.php).
+## Table of Contents
 
-Table of Contents
------------------
 - [Features](#features)
 - [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)
@@ -20,16 +18,16 @@ Table of Contents
 - [Contributing](#contributing)
 - [License](#license)
 
-Features
---------
+## Features
+
 - Random name given to new client
 - Change name
 - Change User Stories
 - Reveal cards
 - Play again
 
-Prerequisites
--------------
+## Prerequisites
+
 - [MongoDB](http://www.mongodb.org/downloads)
 - [Node.js](http://nodejs.org)
 - Command Line Tools
@@ -43,8 +41,8 @@ Prerequisites
 I highly recommend watching [Node.js and Express 101](http://www.youtube.com/watch?v=BN0JlMZCtNU) screencast by Alex Ford that teaches Node and Express from scratch. Alternatively, here is another great tutorial for complete beginners - [Getting Started With Node.js, Express, MongoDB](http://cwbuecheler.com/web/tutorials/2013/node-express-mongo/).
 
 
-Getting Started
----------------
+## Getting Started
+
 
 The easiest way to get started is to clone the repository:
 
@@ -66,8 +64,8 @@ node app.js
 >It is a big time saver in the long run.
 
 
-FAQ
----
+## FAQ
+
 
 
 ### I am getting MongoDB Connection Error, how do I fix it?
@@ -82,26 +80,44 @@ As the message says, you need to have a MongoDB server running before launching 
 ([Homebrew](http://brew.sh/) on Mac, `apt-get` on Ubuntu, `yum` on Fedora, etc.)
 
 
-TODO
-----
+## TODO
 - Change themes on-the-fly
 - Implement multi-room capacity
 - Deploy
 
-Contributing
-------------
+## Contributing
 If something is unclear, confusing, or needs to be refactored, please let me know. Please open an issue before submitting a pull request
 
+## Authors
 
-License
--------
+**David Boclé** - http://github.com/bcldvd
 
-The MIT License (MIT)
 
-Copyright (c) 2014 David Boclé
+## Credits
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+[hackathon-starter](https://github.com/sahat/hackathon-starter) by [@sahat](https://github.com/sahat)
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+## Copyright and license
+
+    The MIT License
+
+    Copyright (c) 2014 David Boclé
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    THE SOFTWARE.
