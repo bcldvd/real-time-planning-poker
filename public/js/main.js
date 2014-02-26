@@ -402,6 +402,8 @@ function revealCards(){
 	.html('Play Again (5)') // Change text with timer
 	.attr('disabled','disabled') // Disable button (to prevent launching a new game without looking at cards)
 
+	// Disable card buttons to prevent user from changing it's value
+	$('#cardsSelection button').attr('disabled', 'disabled');
 
 	playAgainButtonDisplayed = true;
 
@@ -433,8 +435,16 @@ function revealCards(){
 }
 
 function playAgain(people){
-	displayCards(people)
+	// Reset cards
+	displayCards(people);
+
+	// Show ProgressBar
 	showProgressBar(0);
+
+	// Enable card button again
+	$('#cardsSelection button').removeAttr('disabled');
+
+	// Prepare for new user story
 	changeUserStory();
 }
 
