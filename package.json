@@ -21,7 +21,8 @@
     "underscore": "~1.6.0",
     "twilio": "~1.5.0",
     "validator": "~3.2.1",
-    "socket.io": "~0.9.16"
+    "socket.io": "~0.9.16",
+    "uuid": "^1.4.1"
   },
   "license": "MIT"
 }

@@ -5,6 +5,7 @@
 var express = require('express');
 var path = require('path');
 var expressValidator = require('express-validator');
+var uuid = require('uuid');
 
 /**
  * Load controllers.
@@ -63,6 +64,7 @@ app.use(express.errorHandler());
  */
 
 app.get('/', homeController.index);
+app.get('/room/:room', homeController.room);
 
 /**
  * Start Express server.
@@ -92,6 +94,7 @@ io.configure(function() {
 });
 
 var people = {};
+var room = {};
 var currentUserStory = undefined;
 
 io.sockets.on('connection', function(socket) {

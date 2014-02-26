@@ -13,8 +13,7 @@ $(document).ready(function() {
 	* Socket.IO
 	* ________________________
 	*/
-	var socket = io.connect(window.location.href);
-
+	var socket = io.connect('http://localhost:3000');
 
 	/**
 	* Participants
@@ -101,6 +100,27 @@ $(document).ready(function() {
 	*/
 
 	/**
+	* Change Room name
+	*/
+
+	var baseUrl = window.location.protocol + "//" + window.location.host + "/";
+	var roomUrl = baseUrl+'room/'+generateRandomString();
+
+	setTimeout(function(){
+		$('#roomName').val(roomUrl);
+		$('#roomForm .btn').prop('disabled', false);
+	},1500);
+
+	/**
+	* Redirect on form submission
+	*/
+
+	$("#roomForm").submit(function(event){
+		window.location.replace(roomUrl);
+		event.preventDefault();
+	});
+
+	/**
 	* Theme
 	*/
 
@@ -109,6 +129,13 @@ $(document).ready(function() {
 		changeTheme(newTheme);
 	});
 
+	$('#qrCode').qrcode({
+		render: 'div',
+		width: 100,
+		height: 100,
+		color: '#3a3',
+		text: roomUrl
+	});
 
 	/**
 	* Get Planning !
@@ -118,6 +145,7 @@ $(document).ready(function() {
 		// Remove effect for button and footer
 		$('#getPlanning').addClass('animated bounceOutDown');
 		$('#footer').addClass('animated fadeOutDown');
+		$('#qrCode').addClass('animated rotateOutDownLeft')
 		
 		// Remove effect of lead text 500ms after
 		setTimeout(function() {
