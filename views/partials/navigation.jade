@@ -1,10 +1,49 @@
 .navbar.navbar-default
   .container
     .navbar-header
-      //button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
-      //span.sr-only Toggle navigation
-      //span.icon-bar
-      //span.icon-bar
-      //span.icon-bar
-      a.navbar-brand(href='/') Planning Poker
-    //.collapse.navbar-collapse
+      button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+        span.sr-only Toggle navigation
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
+      a.navbar-brand(href='/') Project name
+    .collapse.navbar-collapse
+      ul.nav.navbar-nav
+      
+
+      ul.nav.navbar-nav.navbar-right
+        li.dropdown
+          a#themeButton.dropdown-toggle(href='#', data-toggle='dropdown')
+            | Theme : Flatly
+            span.caret
+          ul#changeTheme.dropdown-menu
+            li
+              a(href='#', data-theme='amelia') Amelia
+            li
+              a(href='#', data-theme='cerulean') Cerulean
+            li
+              a(href='#', data-theme='cosmo') Cosmo
+            li
+              a(href='#', data-theme='cupid') Cupid
+            li
+              a(href='#', data-theme='cyborg') Cyborg
+            li
+              a(href='#', data-theme='flatly') Flatly
+            li
+              a(href='#', data-theme='journal') Journal
+            li
+              a(href='#', data-theme='lumen') Lumen
+            li
+              a(href='#', data-theme='readable') Readable
+            li
+              a(href='#', data-theme='simplex') Simplex
+            li
+              a(href='#', data-theme='slate') Slate
+            li
+              a(href='#', data-theme='spacelab') Spacelab
+            li
+              a(href='#', data-theme='superhero') Superhero
+            li
+              a(href='#', data-theme='united') United
+            li
+              a(href='#', data-theme='yeti') Yeti

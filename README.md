@@ -25,6 +25,7 @@ Got no playing cards to do your planning poker ? No worries, in **less than 5 mi
 - Change User Stories
 - Reveal cards
 - Play again
+- Change themes on-the-fly
 
 ## Prerequisites
 
@@ -81,7 +82,6 @@ As the message says, you need to have a MongoDB server running before launching 
 
 
 ## TODO
-- Change themes on-the-fly
 - Implement multi-room capacity
 - Deploy
 
@@ -96,6 +96,8 @@ If something is unclear, confusing, or needs to be refactored, please let me kno
 ## Credits
 
 [hackathon-starter](https://github.com/sahat/hackathon-starter) by [@sahat](https://github.com/sahat)
+[animate.css](https://github.com/daneden/animate.css) by [@daneden](https://github.com/daneden)
+[bootswatch](https://github.com/thomaspark/bootswatch) by [@thomaspark](https://github.com/thomaspark)
 
 
 ## Copyright and license

@@ -6,6 +6,8 @@ var progressBarDisplayed = true;
 var playAgainButtonDisplayed = false;
 
 $(document).ready(function() {
+
+
 	
 	/**
 	* Socket.IO
@@ -97,6 +99,16 @@ $(document).ready(function() {
 	* Home
 	* ________________________
 	*/
+
+	/**
+	* Theme
+	*/
+
+	$('#changeTheme li a').click(function(e){
+		var newTheme = $(this).attr('data-theme');
+		changeTheme(newTheme);
+	});
+
 
 	/**
 	* Get Planning !
@@ -446,5 +458,21 @@ function playAgain(people){
 
 	// Prepare for new user story
 	changeUserStory();
+}
+
+function changeTheme(theme){
+	// Remove previously added theme
+	$('#customTheme').remove();
+	// Add link to theme
+	$('head').append('<link id="customTheme" rel="stylesheet" href="/css/themes/'+theme+'.css" />');
+	// Add the border-radius to 0 back
+	$('.navbar').css('border-radius', 0);
+	// Set the name of the theme in the button
+	$('#themeButton').html('Theme : '+capitaliseFirstLetter(theme)+' <span class="caret"></span>');
+}
+
+function capitaliseFirstLetter(string)
+{
+    return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
