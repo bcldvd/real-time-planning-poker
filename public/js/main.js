@@ -18,7 +18,7 @@ $(document).ready(function() {
 	* Socket.IO
 	* ________________________
 	*/
-	var socket = io.connect('127.0.0.1');
+	var socket = io.connect(baseUrl);
 	socket.emit('room', room);
 
 
