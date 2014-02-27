@@ -14,7 +14,7 @@ $(document).ready(function() {
 	* Socket.IO
 	* ________________________
 	*/
-	var socket = io.connect('http://localhost:3000');
+	var socket = io.connect('http://'+window.location.host);
 	var room = $('h1').attr('data-room');
 	socket.emit('room', room);
 
