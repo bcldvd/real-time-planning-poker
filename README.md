@@ -2,11 +2,13 @@
 
 Got no playing cards to do your planning poker ? No worries, in **less than 5 minutes** form now, you'll be ready to plan !
 
-![Alt](http://f.cl.ly/items/0628021b2o3A2S2O3s1h/Capture%20d%E2%80%99e%CC%81cran%202014-02-25%20a%CC%80%2014.49.32.png)
+![Alt](http://f.cl.ly/items/1N1E1J2S3E2g163x033U/Capture%20d%E2%80%99e%CC%81cran%202014-02-27%20a%CC%80%2015.38.58.png)
 
-![Alt](http://f.cl.ly/items/09342C3Z132g1H3V2f1w/Capture%20d%E2%80%99e%CC%81cran%202014-02-25%20a%CC%80%2014.50.06.png)
+![Alt](http://f.cl.ly/items/3l1S1e0j0C3U3y25092J/Capture%20d%E2%80%99e%CC%81cran%202014-02-27%20a%CC%80%2015.39.38.png)
 
-![Alt](http://f.cl.ly/items/2D0T0W130C1I1Z270F43/Capture%20d%E2%80%99e%CC%81cran%202014-02-25%20a%CC%80%2014.50.26.png)
+![Alt](http://f.cl.ly/items/3b043n3P3J372H2f1l0v/Capture%20d%E2%80%99e%CC%81cran%202014-02-27%20a%CC%80%2012.45.50.png)
+
+![Alt](http://f.cl.ly/items/031l0G3t2E0u3A3P1N0E/Capture%20d%E2%80%99e%CC%81cran%202014-02-27%20a%CC%80%2012.47.07.png)
 
 ## Table of Contents
 
@@ -26,6 +28,7 @@ Got no playing cards to do your planning poker ? No worries, in **less than 5 mi
 - Play again
 - Change themes on-the-fly
 - Multi-room
+- Theme and name saved into localStorage
 - Deployed on Heroku
 
 ## Prerequisites
@@ -81,6 +84,8 @@ If something is unclear, confusing, or needs to be refactored, please let me kno
 - [hackathon-starter](https://github.com/sahat/hackathon-starter) by [@sahat](https://github.com/sahat)
 - [animate.css](https://github.com/daneden/animate.css) by [@daneden](https://github.com/daneden)
 - [bootswatch](https://github.com/thomaspark/bootswatch) by [@thomaspark](https://github.com/thomaspark)
+- [jquery.clipboard](https://github.com/valeriansaliou/jquery.clipboard) by [@valeriansaliou](https://github.com/valeriansaliou/)
+- [jQuery.qrcode](https://github.com/lrsjng/jQuery.qrcode) by [@lrsjng](https://github.com/lrsjng/)
 
 
 ## Copyright and license
