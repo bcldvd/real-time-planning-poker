@@ -125,7 +125,7 @@ io.sockets.on('connection', function(socket) {
 
 		// Check if client already has a name
 		if (data.name !== undefined){
-			people[socket.id].name = data.name;
+			people[socket.id].name = ent.encode(data.name);
 		}
  
  		// Show for each room who is online in it
