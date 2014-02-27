@@ -10,3 +10,6 @@ block content
 		.form-group
 			input#roomName.form-control(type='text', placeholder='Creating room name...', readonly=true)
 		button.btn.btn-default(disabled=true) Go ▶
+
+block append scripts
+	script(src='/js/home.js?v=#{cacheBuster}')

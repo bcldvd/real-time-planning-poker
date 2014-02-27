@@ -4,10 +4,8 @@ var participants = 0
 var cardsButtonDisplayed = false;
 var progressBarDisplayed = true;
 var playAgainButtonDisplayed = false;
-var baseRoom = generateRandomString();
 var room = $('h1').attr('data-room');
 var baseUrl = window.location.protocol + "//" + window.location.host + "/";
-var roomUrl = baseUrl+'room/'+baseRoom;
 var currentRoomUrl = baseUrl+'room/'+room;
 
 $(document).ready(function() {
@@ -107,27 +105,9 @@ $(document).ready(function() {
 
 
 	/**
-	* Home
+	* Main
 	* ________________________
 	*/
-
-	/**
-	* Change Room name
-	*/
-
-	setTimeout(function(){
-		$('#roomName').val(roomUrl);
-		$('#roomForm .btn').prop('disabled', false);
-	},1500);
-
-	/**
-	* Redirect on form submission
-	*/
-
-	$("#roomForm").submit(function(event){
-		window.location.replace(roomUrl);
-		event.preventDefault();
-	});
 
 	/**
 	* Copy room link to clipboard
