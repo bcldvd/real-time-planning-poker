@@ -9,8 +9,6 @@ var baseUrl = window.location.protocol + "//" + window.location.host + "/";
 var currentRoomUrl = baseUrl+'room/'+room;
 
 $(document).ready(function() {
-
-
 	
 	/**
 	* Socket.IO
@@ -24,6 +22,8 @@ $(document).ready(function() {
 		var name = localStorage.getItem('name');
 		//socket.emit('newName',{newName: localStorage.getItem('name'), room: room});
 		socket.emit('room', {room:room, name: name});
+	}else{
+		socket.emit('room', {room:room});
 	}
 
 
@@ -33,6 +33,7 @@ $(document).ready(function() {
 
 	// Everytime a new person joins or leave, update the participant's list
 	socket.on('participants', function (data) {
+		console.log(data.people);
 		// Clear the participant's list
 		$('#participants').html('');
 
@@ -66,6 +67,7 @@ $(document).ready(function() {
 				count++;
 			}
 		}
+
 		participants = count;
 		displayCards(data.people);
 	});
