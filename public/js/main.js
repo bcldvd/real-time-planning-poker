@@ -5,6 +5,10 @@ var cardsButtonDisplayed = false;
 var progressBarDisplayed = true;
 var playAgainButtonDisplayed = false;
 var baseRoom = generateRandomString();
+var room = $('h1').attr('data-room');
+var baseUrl = window.location.protocol + "//" + window.location.host + "/";
+var roomUrl = baseUrl+'room/'+baseRoom;
+var currentRoomUrl = baseUrl+'room/'+room;
 
 $(document).ready(function() {
 
@@ -14,8 +18,7 @@ $(document).ready(function() {
 	* Socket.IO
 	* ________________________
 	*/
-	var socket = io.connect('http://'+window.location.host);
-	var room = $('h1').attr('data-room');
+	var socket = io.connect(baseUrl);
 	socket.emit('room', room);
 
 	/**
@@ -106,9 +109,6 @@ $(document).ready(function() {
 	* Change Room name
 	*/
 
-	var baseUrl = window.location.protocol + "//" + window.location.host + "/";
-	var roomUrl = baseUrl+'room/'+baseRoom;
-
 	setTimeout(function(){
 		$('#roomName').val(roomUrl);
 		$('#roomForm .btn').prop('disabled', false);
@@ -137,7 +137,7 @@ $(document).ready(function() {
 		width: 100,
 		height: 100,
 		color: '#3a3',
-		text: roomUrl
+		text: currentRoomUrl
 	});
 
 	/**
