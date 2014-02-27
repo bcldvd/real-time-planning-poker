@@ -21,6 +21,7 @@ $(document).ready(function() {
 	var socket = io.connect(baseUrl);
 	socket.emit('room', room);
 
+
 	/**
 	* Participants
 	*/
@@ -141,10 +142,24 @@ $(document).ready(function() {
 	* Theme
 	*/
 
+	// Check local storage if there is already a theme
+	if(localStorage.getItem('theme') == undefined){
+		// If not set it to flatly
+		localStorage.setItem('theme','flatly');
+	}
+
+	// Then apply theme
+	changeTheme(localStorage.getItem('theme'));
+
 	$('#changeTheme li a').click(function(e){
 		var newTheme = $(this).attr('data-theme');
+		localStorage.setItem('theme', newTheme);
 		changeTheme(newTheme);
 	});
+
+	/**
+	* QRCode
+	*/
 
 	$('#qrCode').qrcode({
 		render: 'div',
