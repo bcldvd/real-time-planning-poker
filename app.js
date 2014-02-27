@@ -174,25 +174,24 @@ io.sockets.on('connection', function(socket) {
 	 * Reveal cards to all clients
 	 */
 
-	 socket.on('revealCards', function(){
-	 	socket.emit('revealCards');
-	 	socket.broadcast.emit('revealCards');
+	 socket.on('revealCards', function(data){
+	 	io.sockets.in(data.room).emit('revealCards');
 	 });
 
 	 /**
 	 * Play Again
 	 */
 
-	 socket.on('playAgain', function(){
+	 socket.on('playAgain', function(data){
+	 	var peopleInRoom = {};
+
 	 	// Set all cards to undefined
-	 	var i;
-		for (i in people) {
-			if (people.hasOwnProperty(i)) {
-					people[i].card = undefined;
-			}
-		}
-	 	socket.emit('playAgain', people);
-	 	socket.broadcast.emit('playAgain', people);
+	 	io.sockets.clients(data.room).forEach(function (socket) { 
+			people[socket.id].card = undefined;
+			peopleInRoom[socket.id] = people[socket.id];
+		});
+
+		io.sockets.in(data.room).emit('playAgain', peopleInRoom);
 	 });
 
 

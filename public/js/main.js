@@ -250,11 +250,7 @@ $(document).ready(function() {
 		// Get the new User Story
 		var userStory = $(this).find('input').val();
 
-		// Hide the form and show the new User Story
-		//updateUserStory(userStory);
-		
 		// Send it to the server
-		// socket.emit('newUserStory', userStory, 'room', room);
 		socket.emit('newUserStory', {'userStory': userStory, 'room' : room});
 
 		e.preventDefault();
@@ -272,7 +268,7 @@ $(document).ready(function() {
 	* Reveal Cards
 	*/
 	$(document).on('click','#revealCards',function(e){
-		socket.emit('revealCards', '', 'room', room);
+		socket.emit('revealCards', {'room' : room});
 		e.preventDefault();
 	});
 
@@ -280,7 +276,7 @@ $(document).ready(function() {
 	* Reveal Cards
 	*/
 	$(document).on('click','#playAgain',function(e){
-		socket.emit('playAgain', '', 'room', room);
+		socket.emit('playAgain', {'room' : room});
 		e.preventDefault();
 	});
 
