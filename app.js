@@ -106,8 +106,9 @@ io.sockets.on('connection', function(socket) {
 	 * Newly connected client
 	 */
 	//console.log(socket.id+' : Socket connected');
-	socket.on('room',function(room){
+	socket.on('room',function(data){
 		var peopleInRoom = {};
+		var room = data.room;
 
 		// Join room
 		socket.join(room);
@@ -119,6 +120,11 @@ io.sockets.on('connection', function(socket) {
 		if (rooms[room] === undefined){
 			// If not define it and set it's userStory to undefined
 			rooms[room] = {"name" : room, "currentUserStory" : undefined};
+		}
+
+		// Check if client already has a name
+		if (data.name !== undefined){
+			people[socket.id].name = data.name;
 		}
  
  		// Show for each room who is online in it

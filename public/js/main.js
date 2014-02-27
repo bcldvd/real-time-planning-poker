@@ -19,7 +19,14 @@ $(document).ready(function() {
 	* ________________________
 	*/
 	var socket = io.connect(baseUrl);
-	socket.emit('room', room);
+	//socket.emit('room', room);
+
+	// Check local storage if name is already set
+	if(localStorage.getItem('name') != undefined){
+		var name = localStorage.getItem('name');
+		//socket.emit('newName',{newName: localStorage.getItem('name'), room: room});
+		socket.emit('room', {room:room, name: name});
+	}
 
 
 	/**
@@ -177,7 +184,7 @@ $(document).ready(function() {
 		// Remove effect for button and footer
 		$('#getPlanning').addClass('animated bounceOutDown');
 		$('#footer').addClass('animated fadeOutDown');
-		$('#qrCode').addClass('animated rotateOutDownLeft')
+		$('#qrCode').addClass('animated rotateOutDownLeft');
 		
 		// Remove effect of lead text 500ms after
 		setTimeout(function() {
@@ -189,9 +196,9 @@ $(document).ready(function() {
 			$('h1').addClass('animated bounceOutDown');
 		}, 1000);
 
-		// Actual remove 1500ms after
+		// Actual hide 1500ms after
 		setTimeout(function() {
-			$('#preGame').remove();
+			$('#preGame').hide();
 		}, 1500);
 
 		// Game Arrival effect 1500ms after
@@ -199,10 +206,26 @@ $(document).ready(function() {
 			$('#game').show(function(){
 				$('#game').find('input').focus();
 			});
-			$('#game').addClass('animated flipInY');
+			$('#game').addClass('animated rotateInUpLeft');
 		}, 1500);
 
 		event.preventDefault();
+	});
+
+	/**
+	* Share again
+	*/
+
+	$('#switchGame').click(function(e){
+		// Remove all animations
+		$('#getPlanning').removeClass('animated bounceOutDown');
+		$('#footer').removeClass('animated fadeOutDown');
+		$('#qrCode').removeClass('animated rotateOutDownLeft');
+		$('p.lead').removeClass('animated bounceOutDown');
+		$('h1').removeClass('animated bounceOutDown');
+		$('#preGame').addClass('animated lightSpeedIn').show();
+		$('#game').hide();
+		e.preventDefault();
 	});
 
 
@@ -224,11 +247,6 @@ $(document).ready(function() {
 	/**
 	* Change username
 	*/
-
-	// Check local storage if name is already set
-	if(localStorage.getItem('name') != undefined){
-		socket.emit('newName',{newName: localStorage.getItem('name'), room: room});
-	}
 
 	// Since the elements do not exist yet, we have to use 'on' instead of just 'hover'
 	$('#participants').on('mouseenter', '.activePlayer', function() {
@@ -267,12 +285,6 @@ $(document).ready(function() {
 
 		// Send it to the server
 		socket.emit('newName',{newName: newName, room: room});
-
-		// Following is irrelevant since the list is going to be re-generated
-		$(this).parent().html(newName);
-		$(this).parent().removeClass('changingName');
-		$(this).parent().addClass('notChangingName');
-		$(this).remove();
 		e.preventDefault();
 	});
 
