@@ -37,16 +37,12 @@ $(document).ready(function() {
 
 		// Send a alert for a connection
 		if(data.connect !== undefined){
-			var alert = newAlert('success', data.connect+' just joined');
-			$('#alerts').append(alert.alert);
-			removeAlert(alert.id);
+			newAlert('success', data.connect+' just joined');
 		}
 
 		// Send a alert for a disconnection
 		if(data.disconnect !== undefined){
-			var alert = newAlert('danger', data.disconnect+' just left');
-			$('#alerts').append(alert.alert);
-			removeAlert(alert.id);
+			newAlert('danger', data.disconnect+' just left');
 		}
 
 		// Initialize vars
@@ -81,6 +77,7 @@ $(document).ready(function() {
 	*/
 	socket.on('newUserStory', function(userStory){
 		updateUserStory(userStory);
+		newAlert('warning', 'User story changed to '+userStory);
 	});
 
 	/**
@@ -95,6 +92,7 @@ $(document).ready(function() {
 	*/
 	socket.on('playAgain', function(people){
 		playAgain(people);
+		newAlert('info', 'New game started');
 	});
 
 
@@ -131,18 +129,11 @@ $(document).ready(function() {
 		e.preventDefault();
 	});
 
-	// copy_sel.on('click', function(e) {
- //        e.preventDefault();
- //    });
-
 	$('#shareLink').clipboard({
         path: '../js/lib/jquery.clipboard.swf',
         copy: function() {
-            //alert('room copied. Try to paste it now!');
-            var alert = newAlert('success', 'Link copied to clipboard');
-			$('#alerts').append(alert.alert);
-			removeAlert(alert.id);
-            return $('#shareLink').attr('href');
+        	newAlert('success','Link copied to clipboard');
+            return currentRoomUrl;
         }
 	});
 
@@ -332,6 +323,12 @@ function generateRandomString(){
 
 // Creates an alert, feed with alert type and content
 function newAlert(type, msg){
+	var alert = createAlert(type, msg);
+	$('#alerts').append(alert.alert);
+	removeAlert(alert.id);
+}
+
+function createAlert(type,msg){
 	// Generate a random id for the alert
 	var id = generateRandomString();
 
