@@ -13,3 +13,4 @@
 //= require lib/bootstrap.min
 //= require main
 //= require lib/jquery.qrcode-0.7.0.min
+//= require lib/jquery.clipboard.js

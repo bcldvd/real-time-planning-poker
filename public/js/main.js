@@ -124,6 +124,29 @@ $(document).ready(function() {
 	});
 
 	/**
+	* Copy room link to clipboard
+	*/
+
+	$('#shareLink').on('click', function(e){
+		e.preventDefault();
+	});
+
+	// copy_sel.on('click', function(e) {
+ //        e.preventDefault();
+ //    });
+
+	$('#shareLink').clipboard({
+        path: '../js/lib/jquery.clipboard.swf',
+        copy: function() {
+            //alert('room copied. Try to paste it now!');
+            var alert = newAlert('success', 'Link copied to clipboard');
+			$('#alerts').append(alert.alert);
+			removeAlert(alert.id);
+            return $('#shareLink').attr('href');
+        }
+	});
+
+	/**
 	* Theme
 	*/
 
