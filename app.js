@@ -6,6 +6,7 @@ var express = require('express');
 var path = require('path');
 var expressValidator = require('express-validator');
 var uuid = require('uuid');
+var ent = require('ent');
 
 /**
  * Load controllers.
@@ -108,7 +109,7 @@ io.sockets.on('connection', function(socket) {
 	//console.log(socket.id+' : Socket connected');
 	socket.on('room',function(data){
 		var peopleInRoom = {};
-		var room = data.room;
+		var room = ent.encode(data.room);
 
 		// Join room
 		socket.join(room);
@@ -148,7 +149,7 @@ io.sockets.on('connection', function(socket) {
 	 * Client changes his name
 	 */
 	 socket.on('newName',function(data){
-	 	people[socket.id].name = data.newName; 
+	 	people[socket.id].name = ent.encode(data.newName); 
 	 	io.sockets.in(data.room).emit('participants', {people: people});
 	 });
 
@@ -158,7 +159,7 @@ io.sockets.on('connection', function(socket) {
 	 socket.on('cardSelected',function(data){
 	 	var peopleInRoom = {};
 
-	 	people[socket.id].card = data.card;
+	 	people[socket.id].card = ent.encode(data.card);
 
 		io.sockets.clients(data.room).forEach(function (socket) { 
 			peopleInRoom[socket.id] = people[socket.id];
@@ -172,7 +173,11 @@ io.sockets.on('connection', function(socket) {
 	 */
 
 	 socket.on('newUserStory', function(data){
-	 	rooms[data.room].currentUserStory = data.userStory;
+	 	// If the user story is blank, set it to 'User story'
+	 	if(data.userStory == ''){
+	 		data.userStory = 'User story';
+	 	}
+	 	rooms[data.room].currentUserStory = ent.encode(data.userStory);
 	 	io.sockets.in(data.room).emit('newUserStory', rooms[data.room].currentUserStory);
 	 });
 
