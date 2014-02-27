@@ -13,7 +13,6 @@ Got no playing cards to do your planning poker ? No worries, in **less than 5 mi
 - [Features](#features)
 - [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)
-- [FAQ](#faq)
 - [TODO](#todo)
 - [Contributing](#contributing)
 - [License](#license)
@@ -26,10 +25,11 @@ Got no playing cards to do your planning poker ? No worries, in **less than 5 mi
 - Reveal cards
 - Play again
 - Change themes on-the-fly
+- Multi-room
+- Deployed on Heroku
 
 ## Prerequisites
 
-- [MongoDB](http://www.mongodb.org/downloads)
 - [Node.js](http://nodejs.org)
 - Command Line Tools
  - <img src="http://deluge-torrent.org/images/apple-logo.gif" height="17">&nbsp;**Mac OS X**: [Xcode](https://itunes.apple.com/us/app/xcode/id497799835?mt=12) (or **OS X 10.9 Mavericks**: `xcode-select --install`)
@@ -65,25 +65,8 @@ node app.js
 >It is a big time saver in the long run.
 
 
-## FAQ
-
-
-
-### I am getting MongoDB Connection Error, how do I fix it?
-That's a custom error message defined in `app.js` to indicate that there was a connection problem to MongoDB:
-```js
-mongoose.connection.on('error', function() {
-  console.error('✗ MongoDB Connection Error. Please make sure MongoDB is running.');
-});
-```
-As the message says, you need to have a MongoDB server running before launching `app.js`. You can get MongoDB from
-[mongodb.org/downloads](mongodb.org/downloads), or install it via a package manager
-([Homebrew](http://brew.sh/) on Mac, `apt-get` on Ubuntu, `yum` on Fedora, etc.)
-
-
 ## TODO
-- Implement multi-room capacity
-- Deploy
+- Tweaks
 
 ## Contributing
 If something is unclear, confusing, or needs to be refactored, please let me know. Please open an issue before submitting a pull request
