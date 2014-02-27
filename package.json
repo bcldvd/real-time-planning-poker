@@ -6,6 +6,10 @@
   "scripts": {
     "start": "node app.js"
   },
+   "repository": {
+    "type": "git",
+    "url": "https://github.com/bcldvd/real-time-planning-poker.git"
+  },
   "dependencies": {
     "async": "~0.2.10",
     "bcrypt-nodejs": "~0.0.3",
