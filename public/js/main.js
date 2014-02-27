@@ -4,6 +4,7 @@ var participants = 0
 var cardsButtonDisplayed = false;
 var progressBarDisplayed = true;
 var playAgainButtonDisplayed = false;
+var baseRoom = generateRandomString();
 
 $(document).ready(function() {
 
@@ -14,6 +15,8 @@ $(document).ready(function() {
 	* ________________________
 	*/
 	var socket = io.connect('http://localhost:3000');
+	var room = $('h1').attr('data-room');
+	socket.emit('room', room);
 
 	/**
 	* Participants
@@ -104,7 +107,7 @@ $(document).ready(function() {
 	*/
 
 	var baseUrl = window.location.protocol + "//" + window.location.host + "/";
-	var roomUrl = baseUrl+'room/'+generateRandomString();
+	var roomUrl = baseUrl+'room/'+baseRoom;
 
 	setTimeout(function(){
 		$('#roomName').val(roomUrl);
@@ -183,7 +186,7 @@ $(document).ready(function() {
 		var cardValue = $(this).html();
 
 		// Send it to the server
-		socket.emit('cardSelected', cardValue);
+		socket.emit('cardSelected', {card: cardValue, room: room});
 
 		// Prevent default action
 		event.preventDefault();
@@ -226,7 +229,8 @@ $(document).ready(function() {
 		var newName = $(this).find('input').val();
 
 		// Send it to the server
-		socket.emit('newName', newName);
+		//socket.emit('newName', newName, 'room', room);
+		socket.emit('newName',{newName: newName, room: room});
 
 		// Following is irrelevant since the list is going to be re-generated
 		$(this).parent().html(newName);
@@ -250,7 +254,7 @@ $(document).ready(function() {
 		//updateUserStory(userStory);
 		
 		// Send it to the server
-		socket.emit('newUserStory', userStory);
+		socket.emit('newUserStory', userStory, 'room', room);
 
 		e.preventDefault();
 	});
@@ -267,7 +271,7 @@ $(document).ready(function() {
 	* Reveal Cards
 	*/
 	$(document).on('click','#revealCards',function(e){
-		socket.emit('revealCards');
+		socket.emit('revealCards', '', 'room', room);
 		e.preventDefault();
 	});
 
@@ -275,7 +279,7 @@ $(document).ready(function() {
 	* Reveal Cards
 	*/
 	$(document).on('click','#playAgain',function(e){
-		socket.emit('playAgain');
+		socket.emit('playAgain', '', 'room', room);
 		e.preventDefault();
 	});
 
