@@ -95,11 +95,11 @@ io.configure(function() {
 
 var people = {};
 var rooms = {};
-var currentUserStory = undefined;
+//var currentUserStory = {};
 
 io.sockets.on('connection', function(socket) {
 	// We stock socket's id in the people array with "user" as it's name
-	people[socket.id] = {"name" : randomNames.names[Math.floor(Math.random() * 49) + 1].name};
+	people[socket.id] = {"name" : randomNames.names[Math.floor(Math.random() * 49) + 1].name, "room" : undefined};
 
 
 	/**
@@ -111,21 +111,30 @@ io.sockets.on('connection', function(socket) {
 
 		// Join room
 		socket.join(room);
+
+		// Set the room of the current client
+		people[socket.id].room = room;
+
+		// Check if room id defined
+		if (rooms[room] === undefined){
+			// If not define it and set it's userStory to undefined
+			rooms[room] = {"name" : room, "currentUserStory" : undefined};
+		}
  
  		// Show for each room who is online in it
 		io.sockets.clients(room).forEach(function (socket) { 
-			peopleInRoom[socket.id] = {'name' : people[socket.id].name};
+			peopleInRoom[socket.id] = people[socket.id];
 		});
 
 
 		// Send the list of participants to newly connected socket
 		socket.emit('participants', {people: peopleInRoom, id: socket.id});
 		// Send the current User Story if one is already here
-		if (currentUserStory != undefined) {
-		 	socket.emit('newUserStory', currentUserStory);
+		if (rooms[room].currentUserStory != undefined) {
+		 	socket.emit('newUserStory', rooms[room].currentUserStory);
 		}
 		// Then broadcast the array in order to list all participants in main.js
-		socket.broadcast.to(room).emit('participants', {people: peopleInRoom, connect: peopleInRoom[socket.id].name});
+		socket.broadcast.to(room).emit('participants', {people: peopleInRoom, connect: people[socket.id].name});
 	});
 
 
@@ -133,7 +142,6 @@ io.sockets.on('connection', function(socket) {
 	 * Client changes his name
 	 */
 	 socket.on('newName',function(data){
-	 	console.log(data.room);
 	 	people[socket.id].name = data.newName; 
 	 	io.sockets.in(data.room).emit('participants', {people: people});
 	 });
@@ -147,7 +155,7 @@ io.sockets.on('connection', function(socket) {
 	 	people[socket.id].card = data.card;
 
 		io.sockets.clients(data.room).forEach(function (socket) { 
-			peopleInRoom[socket.id] = {'name' : people[socket.id].name, 'card' : people[socket.id].card};
+			peopleInRoom[socket.id] = people[socket.id];
 		});
 
 		io.sockets.in(data.room).emit('cardSelected', peopleInRoom);
@@ -157,10 +165,9 @@ io.sockets.on('connection', function(socket) {
 	 * Client changes User Story
 	 */
 
-	 socket.on('newUserStory', function(userStory){
-	 	socket.emit('newUserStory', userStory);
-	 	socket.broadcast.emit('newUserStory', userStory);
-	 	currentUserStory = userStory;
+	 socket.on('newUserStory', function(data){
+	 	rooms[data.room].currentUserStory = data.userStory;
+	 	io.sockets.in(data.room).emit('newUserStory', rooms[data.room].currentUserStory);
 	 });
 
 	 /**
@@ -196,10 +203,18 @@ io.sockets.on('connection', function(socket) {
 	// If someones disconnects
 	socket.on('disconnect', function() {
 		var user = people[socket.id].name;
+		var room = people[socket.id].room;
+		var peopleInRoom = {};
+
 		// Delete it's reference in the people array
 		delete people[socket.id];
+
+		io.sockets.clients(room).forEach(function (socket) { 
+			peopleInRoom[socket.id] = people[socket.id];
+		});
+
 		// Then broadcast that someone disconnected, with the remaining participants
-		socket.broadcast.emit('participants', {people: people, disconnect: user});
+		socket.broadcast.to(room).emit('participants', {people: peopleInRoom, disconnect: user});
 		console.log(socket.id+' : Socket disconnected');
 	});
 });

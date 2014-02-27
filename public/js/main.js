@@ -254,7 +254,8 @@ $(document).ready(function() {
 		//updateUserStory(userStory);
 		
 		// Send it to the server
-		socket.emit('newUserStory', userStory, 'room', room);
+		// socket.emit('newUserStory', userStory, 'room', room);
+		socket.emit('newUserStory', {'userStory': userStory, 'room' : room});
 
 		e.preventDefault();
 	});
