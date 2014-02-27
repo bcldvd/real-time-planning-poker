@@ -18,7 +18,7 @@ $(document).ready(function() {
 	* Socket.IO
 	* ________________________
 	*/
-	var socket = io.connect(baseUrl);
+	var socket = io.connect('127.0.0.1');
 	socket.emit('room', room);
 
 
@@ -225,6 +225,11 @@ $(document).ready(function() {
 	* Change username
 	*/
 
+	// Check local storage if name is already set
+	if(localStorage.getItem('name') != undefined){
+		socket.emit('newName',{newName: localStorage.getItem('name'), room: room});
+	}
+
 	// Since the elements do not exist yet, we have to use 'on' instead of just 'hover'
 	$('#participants').on('mouseenter', '.activePlayer', function() {
 		$(this).removeClass('list-group-item-success');
@@ -257,8 +262,10 @@ $(document).ready(function() {
 		// Get the new name
 		var newName = $(this).find('input').val();
 
+		// Save it locally
+		localStorage.setItem('name',newName);
+
 		// Send it to the server
-		//socket.emit('newName', newName, 'room', room);
 		socket.emit('newName',{newName: newName, room: room});
 
 		// Following is irrelevant since the list is going to be re-generated
