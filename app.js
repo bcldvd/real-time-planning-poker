@@ -120,12 +120,15 @@ io.sockets.on('connection', function(socket) {
 		// Check if room id defined
 		if (rooms[room] === undefined){
 			// If not define it and set it's userStory to undefined
-			rooms[room] = {"name" : room, "currentUserStory" : undefined};
+			rooms[room] = {"name" : room, "currentUserStory" : undefined, "cardsRevealed" : false};
 		}
 
 		// Check if client already has a name
 		if (data.name !== undefined){
-			people[socket.id].name = ent.encode(data.name);
+			data.name = ent.encode(data.name.trim());
+			if(data.name != ''){
+				people[socket.id].name = ;
+			}
 		}
  
  		// Show for each room who is online in it
@@ -149,23 +152,30 @@ io.sockets.on('connection', function(socket) {
 	 * Client changes his name
 	 */
 	 socket.on('newName',function(data){
-	 	people[socket.id].name = ent.encode(data.newName); 
-	 	io.sockets.in(data.room).emit('participants', {people: people});
+	 	// Check name (not empty, not full of spaces, no XSS)
+	 	newName = ent.encode(data.newName.trim());
+	 	if(newName != ''){
+		 	people[socket.id].name = newName; 
+		 	io.sockets.in(data.room).emit('participants', {people: people});
+	 	}
 	 });
 
 	/**
 	 * Client chooses his card
 	 */
 	 socket.on('cardSelected',function(data){
-	 	var peopleInRoom = {};
+	 	// Only change card if cards are not revealed yet
+ 	 	if(rooms[data.room].cardsRevealed === false){
+		 	var peopleInRoom = {};
 
-	 	people[socket.id].card = ent.encode(data.card);
+		 	people[socket.id].card = ent.encode(data.card);
 
-		io.sockets.clients(data.room).forEach(function (socket) { 
-			peopleInRoom[socket.id] = people[socket.id];
-		});
+			io.sockets.clients(data.room).forEach(function (socket) { 
+				peopleInRoom[socket.id] = people[socket.id];
+			});
 
-		io.sockets.in(data.room).emit('cardSelected', peopleInRoom);
+			io.sockets.in(data.room).emit('cardSelected', peopleInRoom);
+		}
 	 });
 
 	/**
@@ -177,7 +187,7 @@ io.sockets.on('connection', function(socket) {
 	 	if(data.userStory == ''){
 	 		data.userStory = 'User story';
 	 	}
-	 	rooms[data.room].currentUserStory = ent.encode(data.userStory);
+	 	rooms[data.room].currentUserStory = ent.encode(data.userStory.trim());
 	 	io.sockets.in(data.room).emit('newUserStory', rooms[data.room].currentUserStory);
 	 });
 
@@ -186,7 +196,11 @@ io.sockets.on('connection', function(socket) {
 	 */
 
 	 socket.on('revealCards', function(data){
-	 	io.sockets.in(data.room).emit('revealCards');
+	 	// Only reveal cards if all players chose their's
+	 	if(checkCards(data.room) === true){
+		 	io.sockets.in(data.room).emit('revealCards');
+		 	rooms[data.room].cardsRevealed = true;
+	 	}
 	 });
 
 	 /**
@@ -194,15 +208,20 @@ io.sockets.on('connection', function(socket) {
 	 */
 
 	 socket.on('playAgain', function(data){
-	 	var peopleInRoom = {};
+	 	// Only play again if all players chose cards and the cards are revealed
+	 	if(checkCards(data.room) === true && rooms[data.room].cardsRevealed === true){
+		 	var peopleInRoom = {};
 
-	 	// Set all cards to undefined
-	 	io.sockets.clients(data.room).forEach(function (socket) { 
-			people[socket.id].card = undefined;
-			peopleInRoom[socket.id] = people[socket.id];
-		});
+		 	// Set all cards to undefined
+		 	io.sockets.clients(data.room).forEach(function (socket) { 
+				people[socket.id].card = undefined;
+				peopleInRoom[socket.id] = people[socket.id];
+			});
 
-		io.sockets.in(data.room).emit('playAgain', peopleInRoom);
+			rooms[data.room].cardsRevealed = false;
+
+			io.sockets.in(data.room).emit('playAgain', peopleInRoom);
+		}
 	 });
 
 
@@ -228,3 +247,26 @@ io.sockets.on('connection', function(socket) {
 		console.log(socket.id+' : Socket disconnected');
 	});
 });
+
+/**
+* Functions
+* ________________________
+*/
+
+function checkCards(room){
+	var i = 0;
+	var cards = 0;
+
+	 io.sockets.clients(room).forEach(function (socket) { 
+		if (people[socket.id].card !== undefined){
+			cards++;
+		}
+		i++;
+	});
+
+	if (i == cards){
+		return true;
+	}else{
+		return false;
+	}
+}

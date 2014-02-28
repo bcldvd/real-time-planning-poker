@@ -33,7 +33,6 @@ $(document).ready(function() {
 
 	// Everytime a new person joins or leave, update the participant's list
 	socket.on('participants', function (data) {
-		console.log(data.people);
 		// Clear the participant's list
 		$('#participants').html('');
 

@@ -12,4 +12,5 @@
 //= require lib/jquery-2.1.0.min
 //= require lib/bootstrap.min
 //= require lib/jquery.qrcode-0.7.0.min
-//= require lib/jquery.clipboard.js
+//= require lib/jquery.clipboard
+//= require analytics
