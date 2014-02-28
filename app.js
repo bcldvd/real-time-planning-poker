@@ -127,7 +127,7 @@ io.sockets.on('connection', function(socket) {
 		if (data.name !== undefined){
 			data.name = ent.encode(data.name.trim());
 			if(data.name != ''){
-				people[socket.id].name = ;
+				people[socket.id].name = data.name;
 			}
 		}
  
