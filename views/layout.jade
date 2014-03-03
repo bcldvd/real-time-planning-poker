@@ -30,7 +30,8 @@ html
       include partials/navigation
       .container
         block content
-    include partials/footer
+    block footer
+        include partials/footer
     block scripts
       != js('application')
     script(src='/socket.io/socket.io.js?v=#{cacheBuster}')

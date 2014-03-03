@@ -7,6 +7,16 @@ var playAgainButtonDisplayed = false;
 var room = $('h1').attr('data-room');
 var baseUrl = window.location.protocol + "//" + window.location.host + "/";
 var currentRoomUrl = baseUrl+'room/'+room;
+var mute = false;
+
+	// Load fb sound
+	var fbChatSound = document.createElement('audio');
+	fbChatSound.setAttribute('src', '../fb-pop-noise.mp3');
+	// fbChatSound.setAttribute('autoplay', 'autoplay');
+	$.get();
+	fbChatSound.addEventListener("load", function() {
+		fbChatSound.play();
+	}, true);
 
 $(document).ready(function() {
 	
@@ -102,6 +112,13 @@ $(document).ready(function() {
 		newAlert('info', 'New game started');
 	});
 
+	/**
+	* Receive Message
+	*/
+	socket.on('message', function(data){
+		newMessage(data.msg,data.author);
+	});
+
 
 
 
@@ -161,10 +178,12 @@ $(document).ready(function() {
 	* Get Planning !
 	*/
 
+	$('#footer').remove();
+
 	$("#getPlanning").click(function(event){
 		// Remove effect for button and footer
 		$('#getPlanning').addClass('animated bounceOutDown');
-		$('#footer').addClass('animated fadeOutDown');
+		//$('#footer').addClass('animated fadeOutDown');
 		$('#qrCode').addClass('animated rotateOutDownLeft');
 		
 		// Remove effect of lead text 500ms after
@@ -200,7 +219,7 @@ $(document).ready(function() {
 	$('#switchGame').click(function(e){
 		// Remove all animations
 		$('#getPlanning').removeClass('animated bounceOutDown');
-		$('#footer').removeClass('animated fadeOutDown');
+		//$('#footer').removeClass('animated fadeOutDown');
 		$('#qrCode').removeClass('animated rotateOutDownLeft');
 		$('p.lead').removeClass('animated bounceOutDown');
 		$('h1').removeClass('animated bounceOutDown');
@@ -309,7 +328,79 @@ $(document).ready(function() {
 		e.preventDefault();
 	});
 
+	/**
+	* Chat
+	*/
 
+	// Remove active class if we click out of the chat
+	$('html').click(function() {
+		$('#chatTitle').removeClass( "active" );
+	});
+
+	// Add active class if in the chat
+	$('#chat').click(function(event){
+		$('#chatTitle').addClass( "active" );
+		$('#chatInput textarea').focus();
+		event.stopPropagation();
+	});
+
+	// Add the "online" circle when page is loaded
+	$('#chatTitle p').prepend('<i class="fa fa-circle"></i> ');
+	$('#chatHidden p').prepend('<i class="fa fa-circle"></i> ');
+
+	$('#chatInput textarea').keyup(function () {
+		if($("#chatInput textarea")[0].scrollHeight < 77){
+			$("#chatInput").height( $("#chatInput textarea")[0].scrollHeight );
+			$("#chatInput textarea").height( $("#chatInput textarea")[0].scrollHeight );
+		}
+	});
+
+	// Hide Chat
+	$('#chatTitle').click(function(e){
+		// Don't hide if user is trying to mute chat
+		if (!$(e.target).hasClass('muteButton')){
+			$('#chat').hide();
+			$('#chatHidden').show();
+			e.preventDefault();
+		}
+	});
+
+	// Show chat
+	$('#chatHidden').click(function(e){
+		$('#chatHidden').hide();
+		$('#chat').show();
+		e.preventDefault();
+	});
+
+	$('.muteButton').click(function(e){
+		$(this).toggleClass('fa-volume-off');
+		$(this).toggleClass('fa-volume-up');
+		mute = !mute;
+		e.preventDefault();
+	});
+
+	// Send value when "enter" is presed
+	$('#chatInput textarea').on('keyup', function(e) {
+		if (e.keyCode == 13 && ! e.shiftKey) {
+			e.preventDefault();
+
+			var msg = this.value;
+			// Remove last &Newline; (odd...)
+			msg = msg.slice(0, -1)
+
+			// Send it to the server
+			socket.emit('message', {'room' : room, 'msg' : msg});
+
+			// Display it locally
+			newMessage(msg, null , true);
+			
+			this.value = '';
+
+			// Reset size of textaera
+			$("#chatInput").height(16);
+			$("#chatInput textarea").height(16);
+		}
+	});
 
 
 });
@@ -540,3 +631,25 @@ function capitaliseFirstLetter(string)
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+function newMessage(msg, author, me){
+	msg = msg.trim();
+
+	if(msg != ''){
+		if(me === true){
+			var message = '<li class="me">'
+			+'<div class="message">'+msg+'</div>'
+			+'</li>';
+		}else{
+			var message = '<li>'
+			+'<div class="author">'+author+'</div>'
+			+'<div class="message">'+msg+'</div>'
+			+'</li>';
+			if(mute != true){
+				fbChatSound.play();
+			}
+		}
+		$('#chatContent ul').append(message);
+		$('#chatContent ul').scrollTop($('#chatContent ul')[0].scrollHeight);
+	}
+	
+}

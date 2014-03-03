@@ -225,6 +225,19 @@ io.sockets.on('connection', function(socket) {
 	 });
 
 
+	 /**
+	 * Send message
+	 */
+
+	 socket.on('message', function(data){
+	 	var msg = ent.encode(data.msg).trim();
+
+	 	// Only send message if not empty
+	 	if(msg != ''){
+			socket.broadcast.to(data.room).emit('message', {msg: msg, author: people[socket.id].name});
+	 	}
+	 });
+
 
 	/**
 	 * Client disconnects

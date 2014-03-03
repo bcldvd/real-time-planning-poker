@@ -63,7 +63,20 @@ block content
 				i.fa.fa-external-link
 				| Share link
 
+	div#chat.hidden-xs
+		div#chatTitle
+			p Chat 
+				i.fa.fa-volume-up.muteButton
+		div#chatContent
+			ul
+		div#chatInput
+			textarea
+	div#chatHidden.hidden-xs
+		p Chat
+
 	div#alerts
+
+block footer
 
 block append scripts
 	script(src='/js/main.js?v=#{cacheBuster}')
