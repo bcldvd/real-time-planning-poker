@@ -29,6 +29,7 @@ Got no playing cards to do your planning poker ? No worries, in **less than 5 mi
 - Change themes on-the-fly
 - Multi-room
 - Theme and name saved into localStorage
+- Facebook like Chat
 - Deployed on Heroku
 
 ## Prerequisites
