@@ -116,7 +116,7 @@ $(document).ready(function() {
 	* Receive Message
 	*/
 	socket.on('message', function(data){
-		newMessage(data.msg,data.author);
+		newMessage(data.msg, data.author, data.me, data.server);
 	});
 
 
@@ -379,7 +379,7 @@ $(document).ready(function() {
 		e.preventDefault();
 	});
 
-	// Send value when "enter" is presed
+	// Send value when "enter" is presed and hide chat if "esc"
 	$('#chatInput textarea').on('keyup', function(e) {
 		if (e.keyCode == 13 && ! e.shiftKey) {
 			e.preventDefault();
@@ -399,6 +399,10 @@ $(document).ready(function() {
 			// Reset size of textaera
 			$("#chatInput").height(16);
 			$("#chatInput textarea").height(16);
+		}else if(e.keyCode == 27){
+			$('#chat').hide();
+			$('#chatHidden').show();
+			e.preventDefault();
 		}
 	});
 
@@ -631,7 +635,7 @@ function capitaliseFirstLetter(string)
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-function newMessage(msg, author, me){
+function newMessage(msg, author, me, muteFromServer){
 	msg = msg.trim();
 
 	if(msg != ''){
@@ -644,7 +648,7 @@ function newMessage(msg, author, me){
 			+'<div class="author">'+author+'</div>'
 			+'<div class="message">'+msg+'</div>'
 			+'</li>';
-			if(mute != true){
+			if(mute != true && muteFromServer != true){
 				fbChatSound.play();
 			}
 		}

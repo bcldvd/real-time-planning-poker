@@ -120,7 +120,7 @@ io.sockets.on('connection', function(socket) {
 		// Check if room id defined
 		if (rooms[room] === undefined){
 			// If not define it and set it's userStory to undefined
-			rooms[room] = {"name" : room, "currentUserStory" : undefined, "cardsRevealed" : false};
+			rooms[room] = {"name" : room, "currentUserStory" : undefined, "cardsRevealed" : false, "lastMessages" : []};
 		}
 
 		// Check if client already has a name
@@ -130,7 +130,16 @@ io.sockets.on('connection', function(socket) {
 				people[socket.id].name = data.name;
 			}
 		}
- 
+	
+		// Display last messages sent 
+		rooms[room].lastMessages.forEach(function(data){
+			if(data.author == people[socket.id].name){
+				socket.emit('message', {msg: data.msg, author : null, me : true, server :  true});
+			}else{
+				socket.emit('message', {msg: data.msg, author: data.author, me : false, server : true});
+			}
+		});
+
  		// Show for each room who is online in it
 		io.sockets.clients(room).forEach(function (socket) { 
 			peopleInRoom[socket.id] = people[socket.id];
@@ -231,6 +240,15 @@ io.sockets.on('connection', function(socket) {
 
 	 socket.on('message', function(data){
 	 	var msg = ent.encode(data.msg).trim();
+
+	 	// Save last 10 message on server
+	 	var message = {msg: msg, author : people[socket.id].name};
+	 	if(rooms[data.room].lastMessages.length < 10){
+	 		rooms[data.room].lastMessages.push(message);
+	 	}else{
+	 		rooms[data.room].lastMessages.shift();
+	 		rooms[data.room].lastMessages.push(message);
+	 	}
 
 	 	// Only send message if not empty
 	 	if(msg != ''){
